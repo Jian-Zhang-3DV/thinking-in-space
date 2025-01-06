@@ -71,6 +71,7 @@ class Llava_OneVision(lmms):
     def __init__(
         self,
         pretrained: str = "liuhaotian/llava-v1.5-7b",
+        model_base: str = None,
         truncation: Optional[bool] = True,
         device: Optional[str] = "cuda:0",
         batch_size: Optional[Union[int, str]] = 1,
@@ -116,6 +117,7 @@ class Llava_OneVision(lmms):
         model_name = model_name if model_name is not None else get_model_name_from_path(pretrained)
 
         self.pretrained = pretrained
+        self.model_base = model_base
         self.token_strategy = token_strategy
         self.max_frames_num = max_frames_num
         self.mm_spatial_pool_stride = mm_spatial_pool_stride
@@ -142,11 +144,11 @@ class Llava_OneVision(lmms):
         llava_model_args["overwrite_config"] = overwrite_config
         try:
             # Try to load the model with the multimodal argument
-            self._tokenizer, self._model, self._image_processor, self._max_length = load_pretrained_model(pretrained, None, model_name, device_map=self.device_map, **llava_model_args)
+            self._tokenizer, self._model, self._image_processor, self._max_length = load_pretrained_model(pretrained, model_base, model_name, device_map=self.device_map, **llava_model_args)
         except TypeError:
             # for older versions of LLaVA that don't have multimodal argument
             llava_model_args.pop("multimodal", None)
-            self._tokenizer, self._model, self._image_processor, self._max_length = load_pretrained_model(pretrained, None, model_name, device_map=self.device_map, **llava_model_args)
+            self._tokenizer, self._model, self._image_processor, self._max_length = load_pretrained_model(pretrained, model_base, model_name, device_map=self.device_map, **llava_model_args)
 
         self._config = self._model.config
         self.model.eval()
