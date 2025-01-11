@@ -11,7 +11,7 @@ max_frames_num=32"
 export LMMS_EVAL_LAUNCHER="accelerate"
 
 # 修改启动命令
-srun accelerate launch \
+accelerate launch \
     --num_processes=1 \
     -m lmms_eval \
     --model $model_family \
