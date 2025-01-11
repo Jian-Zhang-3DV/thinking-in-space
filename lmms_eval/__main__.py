@@ -342,8 +342,9 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         try:
             # if is_main_process and args.wandb_args:  # thoughtfully we should only init wandb once, instead of multiple ranks to avoid network traffics and unwanted behaviors.
             #     wandb_logger = WandbLogger()
-
-            results, samples = cli_evaluate_single(args)
+            # set datetime before evaluation
+            datetime_str = utils.get_datetime_str(timezone=args.timezone)
+            results, samples = cli_evaluate_single(args, datetime_str)
             results_list.append(results)
 
             if IS_ACCELERATE_LAUNCHED:
@@ -375,7 +376,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         wandb_logger.run.finish()
 
 
-def cli_evaluate_single(args: Union[argparse.Namespace, None] = None) -> None:
+def cli_evaluate_single(args: Union[argparse.Namespace, None] = None, datetime_str: str = None) -> None:
     selected_task_list = args.tasks.split(",") if args.tasks else None
 
     if args.include_path is not None:
@@ -483,8 +484,6 @@ def cli_evaluate_single(args: Union[argparse.Namespace, None] = None) -> None:
     eval_logger.info(f"Selected Tasks: {task_names}")
     request_caching_args = request_caching_arg_to_dict(cache_requests=args.cache_requests)
 
-    # set datetime before evaluation
-    datetime_str = utils.get_datetime_str(timezone=args.timezone)
     if args.output_path:
 
         hash_input = f"{args.model_args}".encode("utf-8")
