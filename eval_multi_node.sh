@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=eval_llava          # 作业名称
-#SBATCH --nodes=2                      # 需要的节点数
+#SBATCH --nodes=4                      # 需要的节点数
 #SBATCH --time=00:15:00                # 时间
-#SBATCH --output=logs/job_%j.out       # 输出日志
+#SBATCH --output=slurm_logs/job_%j.out # 输出日志
 #SBATCH --partition=gh                 # 分区
 
 benchmark="vsibench"
 model="llava_one_vision_qwen2_7b_ov_32f"
-output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
+output_path=eval_results/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
 model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-spann3r/checkpoint-150,\
 conv_template=qwen_1_5,\
