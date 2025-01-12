@@ -1,9 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=eval_llava          # 作业名称
-#SBATCH --nodes=4                      # 需要的节点数
-#SBATCH --time=00:15:00                # 时间
-#SBATCH --output=slurm_logs/job_%j.out # 输出日志
-#SBATCH --partition=gh                 # 分区
+
+# 设置分布式相关参数
+export WORLD_SIZE=$SLURM_JOB_NUM_NODES
+export NODE_RANK=$SLURM_PROCID
+export MASTER_ADDR=$(scontrol show hostname $SLURM_NODELIST | head -n 1)
+export MASTER_PORT=27500
+
+# 打印分布式参数（用于调试）
+echo "WORLD_SIZE: $WORLD_SIZE"
+echo "NODE_RANK: $NODE_RANK"
+echo "MASTER_ADDR: $MASTER_ADDR"
+echo "MASTER_PORT: $MASTER_PORT"
 
 benchmark="vsibench"
 model="llava_one_vision_qwen2_7b_ov_32f"
@@ -15,23 +22,10 @@ model_name=llava_qwen,\
 max_frames_num=32"
 export LMMS_EVAL_LAUNCHER="accelerate"
 
-# 获取 SLURM 提供的分布式参数
-WORLD_SIZE=$SLURM_JOB_NUM_NODES
-NODE_RANK=$SLURM_PROCID
-MASTER_ADDR=$(scontrol show hostname $SLURM_NODELIST | head -n 1)
-MASTER_PORT=27500  # 自定义一个未被占用的端口
-
-# 打印分布式参数
-echo "WORLD_SIZE: $WORLD_SIZE"
-echo "NODE_RANK: $NODE_RANK"
-echo "MASTER_ADDR: $MASTER_ADDR"
-echo "MASTER_PORT: $MASTER_PORT"
-
-# 修改启动命令
-srun accelerate launch \
-    --num_processes=$SLURM_JOB_NUM_NODES \
-    --num_machines=$SLURM_JOB_NUM_NODES \
-    --machine_rank=$SLURM_PROCID \
+accelerate launch \
+    --num_processes=$WORLD_SIZE \
+    --num_machines=$WORLD_SIZE \
+    --machine_rank=$NODE_RANK \
     --main_process_ip=$MASTER_ADDR \
     --main_process_port=$MASTER_PORT \
     -m lmms_eval \
