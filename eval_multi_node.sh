@@ -28,6 +28,10 @@ export LMMS_EVAL_LAUNCHER="accelerate"
 accelerate launch \
     --num_machines=$WORLD_SIZE \
     --num_processes=$WORLD_SIZE \
+    --machine_rank=$RANK \
+    --main_process_ip=$MASTER_ADDR \
+    --main_process_port=$MASTER_PORT \
+    --multi_gpu \
     -m lmms_eval \
     --model $model_family \
     --model_args $model_args \
