@@ -3,6 +3,8 @@
 # 设置分布式相关参数
 export WORLD_SIZE=$SLURM_JOB_NUM_NODES
 
+echo "WORLD_SIZE: $WORLD_SIZE"
+
 benchmark="vsibench"
 model="llava_one_vision_qwen2_7b_ov_32f"
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
@@ -14,6 +16,7 @@ max_frames_num=32"
 export LMMS_EVAL_LAUNCHER="accelerate"
 
 accelerate launch \
+    --num_machines=$WORLD_SIZE \
     --num_processes=$WORLD_SIZE \
     -m lmms_eval \
     --model $model_family \
