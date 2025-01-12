@@ -1,9 +1,19 @@
 #!/bin/bash
 
-# 设置分布式相关参数
-export WORLD_SIZE=$SLURM_JOB_NUM_NODES
+# SLURM 环境下的分布式训练设置
+export WORLD_SIZE=$SLURM_JOB_NUM_NODES  # 总节点数
+export RANK=$SLURM_PROCID               # 当前节点的 rank，由 SLURM 自动分配
+export LOCAL_RANK=$SLURM_LOCALID        # 本地 GPU ID，由 SLURM 自动分配
+export MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)  # 主节点地址
+export MASTER_PORT=29500   
 
-echo "WORLD_SIZE: $WORLD_SIZE"
+# 打印环境变量进行检查
+echo "分布式训练环境变量："
+echo "WORLD_SIZE = $WORLD_SIZE"
+echo "RANK = $RANK"
+echo "LOCAL_RANK = $LOCAL_RANK"
+echo "MASTER_ADDR = $MASTER_ADDR"
+echo "MASTER_PORT = $MASTER_PORT"
 
 benchmark="vsibench"
 model="llava_one_vision_qwen2_7b_ov_32f"
