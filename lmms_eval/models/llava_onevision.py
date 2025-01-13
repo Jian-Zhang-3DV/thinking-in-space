@@ -56,7 +56,6 @@ except ImportError as e:
 
 
 # Determine best attention implementation
-import pdb; pdb.set_trace()
 if version.parse(torch.__version__) >= version.parse("2.1.2"):
     best_fit_attn_implementation = "sdpa"
 else:
