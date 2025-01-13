@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# 接收checkpoint参数，如果没有传入则使用默认值150
-CKPT_NUM=${1:-150}
+pretrained=${1:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
 
 # SLURM 环境下的分布式训练设置
 export WORLD_SIZE=$SLURM_JOB_NUM_NODES  # 总节点数
@@ -19,13 +18,15 @@ echo "MASTER_ADDR = $MASTER_ADDR"
 echo "MASTER_PORT = $MASTER_PORT"
 
 benchmark="vsibench"
-model="llava_one_vision_qwen2_7b_ov_64f"
+max_frames_num=32
+model="llava_one_vision_qwen2_7b_ov_${max_frames_num}f"
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
-model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-spann3r/checkpoint-${CKPT_NUM},\
+model_args="pretrained=${pretrained},\
 conv_template=qwen_1_5,\
 model_name=llava_qwen,\
-max_frames_num=64"
+max_frames_num=${max_frames_num}"
+
 export LMMS_EVAL_LAUNCHER="accelerate"
 
 accelerate launch \

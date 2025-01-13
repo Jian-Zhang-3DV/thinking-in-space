@@ -6,7 +6,7 @@
 #SBATCH --partition=gh
 
 # 从命令行接收checkpoint参数
-CKPT_NUM=${1:-150}  # 如果没有传入参数，默认使用150
+pretrained=${1:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
 
 # 使用srun启动运行脚本，并传入参数
-srun bash eval_multi_node.sh $CKPT_NUM
+srun bash eval_multi_node.sh $pretrained
