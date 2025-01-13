@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 接收checkpoint参数，如果没有传入则使用默认值150
+CKPT_NUM=${1:-150}
+
 # SLURM 环境下的分布式训练设置
 export WORLD_SIZE=$SLURM_JOB_NUM_NODES  # 总节点数
 export RANK=$SLURM_PROCID               # 当前节点的 rank，由 SLURM 自动分配
@@ -19,7 +22,7 @@ benchmark="vsibench"
 model="llava_one_vision_qwen2_7b_ov_64f"
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
-model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-spann3r/checkpoint-150,\
+model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-spann3r/checkpoint-${CKPT_NUM},\
 conv_template=qwen_1_5,\
 model_name=llava_qwen,\
 max_frames_num=64"

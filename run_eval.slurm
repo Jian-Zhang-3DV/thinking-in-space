@@ -1,9 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=eval_llava
-#SBATCH --nodes=8
-#SBATCH --time=00:30:00
+#SBATCH --nodes=16
+#SBATCH --time=00:15:00
 #SBATCH --output=slurm_logs/job_%j.out
 #SBATCH --partition=gh
 
-# 使用srun启动运行脚本
-srun bash eval_multi_node.sh
+# 从命令行接收checkpoint参数
+CKPT_NUM=${1:-150}  # 如果没有传入参数，默认使用150
+
+# 使用srun启动运行脚本，并传入参数
+srun bash eval_multi_node.sh $CKPT_NUM
