@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=eval_llava
-#SBATCH --nodes=16
-#SBATCH --time=00:15:00
+#SBATCH --nodes=4
+#SBATCH --time=00:10:00
 #SBATCH --output=slurm_logs/job_%j.out
 #SBATCH --partition=gh
 

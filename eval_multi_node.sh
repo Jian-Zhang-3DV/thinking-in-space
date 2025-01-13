@@ -23,6 +23,7 @@ model="llava_one_vision_qwen2_7b_ov_${max_frames_num}f"
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
 model_args="pretrained=${pretrained},\
+attn_implementation=flash_attention_2,\
 conv_template=qwen_1_5,\
 model_name=llava_qwen,\
 max_frames_num=${max_frames_num}"
