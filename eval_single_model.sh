@@ -4,6 +4,7 @@ output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
 model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-spann3r/checkpoint-150,\
 conv_template=qwen_1_5,\
+attn_implementation=flash_attention_2,\
 model_name=llava_qwen,\
 max_frames_num=32"
 # model_args="pretrained=LLaVA-NeXT/work_dirs/llavanext-google_siglip-so400m-patch14-384-Qwen_Qwen2-7B-Instruct-ov_to_video_am9,conv_template=qwen_1_5,model_name=llava_qwen,max_frames_num=32"
