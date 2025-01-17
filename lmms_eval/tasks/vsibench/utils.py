@@ -72,9 +72,6 @@ def vsibench_doc_to_text(doc, lmms_eval_specific_kwargs=None):
 
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
-    # 只保留 object_counting 类型的数据
-    dataset = dataset.filter(lambda x: x['question_type'] == 'object_counting')
-    
     if os.getenv('LMMS_EVAL_SHUFFLE_DOCS', None):
         eval_logger.info(f"Environment variable LMMS_EVAL_SHUFFLE_DOCS detected, dataset will be shuffled.")
         return dataset.shuffle(seed=42)
@@ -145,11 +142,11 @@ def vsibench_aggregate_results(results):
         else:
             raise ValueError(f"Unknown question type: {question_type}")
     
-    # output['object_rel_direction_accuracy'] = sum([
-    #     output.pop('object_rel_direction_easy_accuracy'),
-    #     output.pop('object_rel_direction_medium_accuracy'),
-    #     output.pop('object_rel_direction_hard_accuracy'),
-    # ]) / 3.
+    output['object_rel_direction_accuracy'] = sum([
+        output.pop('object_rel_direction_easy_accuracy'),
+        output.pop('object_rel_direction_medium_accuracy'),
+        output.pop('object_rel_direction_hard_accuracy'),
+    ]) / 3.
     
     output['overall'] = sum([_ for _ in output.values()]) / len(output)
     eval_logger.info(f"Evaluation results: {output}")
