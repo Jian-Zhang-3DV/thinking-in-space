@@ -29,7 +29,8 @@ model_family="llava_onevision"
 model_args="pretrained=${pretrained},\
 attn_implementation=flash_attention_2,\
 conv_template=qwen_1_5,\
-model_name=llava_qwen,\
+model_name=llava_qwen_lora,\
+model_base=LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2,\
 max_frames_num=${max_frames_num}"
 
 export LMMS_EVAL_LAUNCHER="accelerate"
