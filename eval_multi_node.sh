@@ -19,7 +19,11 @@ echo "MASTER_PORT = $MASTER_PORT"
 
 benchmark="vsibench"
 max_frames_num=32
-model="llava_one_vision_qwen2_7b_ov_${max_frames_num}f"
+
+# 从pretrained路径中提取模型名称
+model_name=$(basename ${pretrained})
+model="llava_one_vision_${model_name}_ov_${max_frames_num}f"
+
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
 model_args="pretrained=${pretrained},\
