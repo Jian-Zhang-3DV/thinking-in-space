@@ -23,7 +23,6 @@ benchmark="vsibench"
 max_frames_num=32
 
 # 从pretrained路径中提取模型名称
-model_name=$(basename ${pretrained})
 model="llava_one_vision_${model_name}_ov_${max_frames_num}f"
 
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
