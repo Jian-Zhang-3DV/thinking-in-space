@@ -1,6 +1,7 @@
 #!/bin/bash
 
 pretrained=${1:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
+use_lora=${2:-"false"}
 
 # SLURM 环境下的分布式训练设置
 export WORLD_SIZE=$SLURM_JOB_NUM_NODES  # 总节点数
@@ -26,12 +27,20 @@ model="llava_one_vision_${model_name}_ov_${max_frames_num}f"
 
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
-model_args="pretrained=${pretrained},\
-attn_implementation=flash_attention_2,\
-conv_template=qwen_1_5,\
-model_name=llava_qwen_lora,\
-model_base=LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2,\
-max_frames_num=${max_frames_num}"
+if [ "$use_lora" = "true" ]; then
+    model_args="pretrained=${pretrained},\
+    attn_implementation=flash_attention_2,\
+    conv_template=qwen_1_5,\
+    model_name=llava_qwen_lora,\
+    model_base=LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2,\
+    max_frames_num=${max_frames_num}"
+else
+    model_args="pretrained=${pretrained},\
+    attn_implementation=flash_attention_2,\
+    conv_template=qwen_1_5,\
+    model_name=llava_qwen,\
+    max_frames_num=${max_frames_num}"
+fi
 
 export LMMS_EVAL_LAUNCHER="accelerate"
 
