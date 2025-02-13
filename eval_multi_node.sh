@@ -1,8 +1,8 @@
 #!/bin/bash
 
 pretrained=${1:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
-model_base=${2:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
-model_name=${3:-"llava_qwen"}
+model_name=${2:-"llava_qwen"}
+model_base=${3:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
 
 # SLURM 环境下的分布式训练设置
 export WORLD_SIZE=$SLURM_JOB_NUM_NODES  # 总节点数
