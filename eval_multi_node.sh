@@ -27,19 +27,20 @@ model="llava_one_vision_${model_name}_ov_${max_frames_num}f"
 
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_family="llava_onevision"
+
 if [ "$use_lora" = "true" ]; then
     model_args="pretrained=${pretrained},\
-    attn_implementation=flash_attention_2,\
-    conv_template=qwen_1_5,\
-    model_name=llava_qwen_lora,\
-    model_base=LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2,\
-    max_frames_num=${max_frames_num}"
+attn_implementation=flash_attention_2,\
+conv_template=qwen_1_5,\
+model_name=llava_qwen_lora,\
+model_base=LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2,\
+max_frames_num=${max_frames_num}"
 else
     model_args="pretrained=${pretrained},\
-    attn_implementation=flash_attention_2,\
-    conv_template=qwen_1_5,\
-    model_name=llava_qwen,\
-    max_frames_num=${max_frames_num}"
+attn_implementation=flash_attention_2,\
+conv_template=qwen_1_5,\
+model_name=llava_qwen,\
+max_frames_num=${max_frames_num}"
 fi
 
 export LMMS_EVAL_LAUNCHER="accelerate"
