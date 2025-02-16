@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 import yaml
@@ -41,8 +40,6 @@ with open(Path(__file__).parent / "vsibench.yaml", "r") as f:
     for i, line in enumerate(raw_data):
         if "!function" not in line:
             safe_data.append(line)
-    # 筛选safedata
-    safe_data = [line for line in safe_data if line['question_type'] == "object_counting"]
 cache_name = yaml.safe_load("".join(safe_data))["dataset_kwargs"]["cache_dir"]
 
 
@@ -74,9 +71,13 @@ def vsibench_doc_to_text(doc, lmms_eval_specific_kwargs=None):
 
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
+    # 筛选 object_counting 类型的问题
+    dataset = dataset.filter(lambda x: x['question_type'] == 'object_counting')
+    
     if os.getenv('LMMS_EVAL_SHUFFLE_DOCS', None):
         eval_logger.info(f"Environment variable LMMS_EVAL_SHUFFLE_DOCS detected, dataset will be shuffled.")
         return dataset.shuffle(seed=42)
+    
     return dataset
 
 def fuzzy_matching(pred):
@@ -125,7 +126,6 @@ def vsibench_process_results(doc, results):
 
 def vsibench_aggregate_results(results):
     results = pd.DataFrame(results)
-    
     output = {}
 
     for question_type, question_type_indexes in results.groupby('question_type').groups.items():
@@ -144,11 +144,21 @@ def vsibench_aggregate_results(results):
         else:
             raise ValueError(f"Unknown question type: {question_type}")
     
-    # output['object_rel_direction_accuracy'] = sum([
-    #     output.pop('object_rel_direction_easy_accuracy'),
-    #     output.pop('object_rel_direction_medium_accuracy'),
-    #     output.pop('object_rel_direction_hard_accuracy'),
-    # ]) / 3.
+    object_rel_direction_tasks = [
+        'object_rel_direction_easy',
+        'object_rel_direction_medium',
+        'object_rel_direction_hard',
+    ]
+    
+    # 计算方向相关任务的平均准确率
+    direction_accuracies = []
+    for task in object_rel_direction_tasks:
+        accuracy_key = f'{task}_accuracy'
+        if accuracy_key in output:
+            direction_accuracies.append(output.pop(accuracy_key))
+    
+    if direction_accuracies:  # 只在有结果时计算平均值
+        output['object_rel_direction_accuracy'] = sum(direction_accuracies) / len(direction_accuracies)
     
     output['overall'] = sum([_ for _ in output.values()]) / len(output)
     eval_logger.info(f"Evaluation results: {output}")
