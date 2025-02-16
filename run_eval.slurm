@@ -6,8 +6,8 @@
 #SBATCH --partition=gh
 
 # 从命令行接收checkpoint参数
-pretrained=${1:-"LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"}
-use_lora=${2:-"false"}
-
+pretrained=$1
+model_name=$2
+model_base=$3
 # 使用srun启动运行脚本，并传入参数
-srun bash eval_multi_node.sh $pretrained $use_lora
+srun bash eval_multi_node.sh $pretrained $model_name $model_base
