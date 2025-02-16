@@ -41,6 +41,8 @@ with open(Path(__file__).parent / "vsibench.yaml", "r") as f:
     for i, line in enumerate(raw_data):
         if "!function" not in line:
             safe_data.append(line)
+    # 筛选safedata
+    safe_data = [line for line in safe_data if line['question_type'] == "object_counting"]
 cache_name = yaml.safe_load("".join(safe_data))["dataset_kwargs"]["cache_dir"]
 
 
@@ -142,11 +144,11 @@ def vsibench_aggregate_results(results):
         else:
             raise ValueError(f"Unknown question type: {question_type}")
     
-    output['object_rel_direction_accuracy'] = sum([
-        output.pop('object_rel_direction_easy_accuracy'),
-        output.pop('object_rel_direction_medium_accuracy'),
-        output.pop('object_rel_direction_hard_accuracy'),
-    ]) / 3.
+    # output['object_rel_direction_accuracy'] = sum([
+    #     output.pop('object_rel_direction_easy_accuracy'),
+    #     output.pop('object_rel_direction_medium_accuracy'),
+    #     output.pop('object_rel_direction_hard_accuracy'),
+    # ]) / 3.
     
     output['overall'] = sum([_ for _ in output.values()]) / len(output)
     eval_logger.info(f"Evaluation results: {output}")
