@@ -53,15 +53,24 @@ def is_checkpoint_complete(checkpoint_path, check_interval=15, max_checks=4):
     print("Checkpoint not yet complete (size still changing)")
     return False
 
+def is_job_submitted(checkpoint_path):
+    """
+    Check if evaluation job has already been submitted for this checkpoint
+    by looking for a .submitted flag file
+    """
+    submitted_flag = Path(checkpoint_path) / '.submitted'
+    return submitted_flag.exists()
+
+def mark_job_submitted(checkpoint_path):
+    """
+    Create a .submitted flag file to indicate job has been submitted
+    """
+    submitted_flag = Path(checkpoint_path) / '.submitted'
+    submitted_flag.touch()
+
 def find_unevaluated_checkpoints(parent_dir, work_dir, conda_env, interval=600):
     """
     Recursively monitor a directory for unevaluated checkpoint folders
-    
-    Args:
-        parent_dir: Directory to monitor for checkpoints
-        work_dir: Project directory containing evaluation scripts
-        conda_env: Conda environment name for evaluation
-        interval: Time interval between monitoring cycles in seconds
     """
     while True:
         print(f"\n=== Starting new monitoring cycle at {time.strftime('%Y-%m-%d %H:%M:%S')} ===")
@@ -87,6 +96,11 @@ def find_unevaluated_checkpoints(parent_dir, work_dir, conda_env, interval=600):
                     print("Skipping: checkpoint already evaluated")
                     continue
                 
+                # Check if job already submitted
+                if is_job_submitted(checkpoint_path):
+                    print("Skipping: evaluation job already submitted")
+                    continue
+                
                 # Check if checkpoint is complete
                 if is_checkpoint_complete(checkpoint_path):
                     unevaluated.append(str(checkpoint_path))
@@ -100,14 +114,18 @@ def find_unevaluated_checkpoints(parent_dir, work_dir, conda_env, interval=600):
                     f"cd {work_dir} && "
                     f"source ~/.bashrc && "
                     f"conda activate {conda_env} && "
-                    f"sbatch -N 16 -p gh -t 00:20:00 "
+                    f"sbatch -N 8 -p gh -t 00:40:00 "
                     f"--output={checkpoint_path}/eval.log "
                     f"run_eval.slurm {checkpoint_path} "
                     f"llava_qwen_lora LLaVA-NeXT/checkpoints/LLaVA-Video-7B-Qwen2"
                 )
                 print("Executing command:", cmd)
-                os.system(cmd)
-                print("Job submitted")
+                # Submit job and check if submission was successful
+                if os.system(cmd) == 0:
+                    mark_job_submitted(checkpoint_path)
+                    print("Job submitted successfully and marked")
+                else:
+                    print("Job submission failed")
         else:
             print("\nNo checkpoints ready for evaluation")
         
