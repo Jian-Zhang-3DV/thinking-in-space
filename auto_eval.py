@@ -13,14 +13,14 @@ def get_dir_size(path):
                 total_size += fp.stat().st_size
     return total_size
 
-def is_checkpoint_complete(checkpoint_path, check_interval=60, max_checks=5):
+def is_checkpoint_complete(checkpoint_path, check_interval=15, max_checks=4):
     """
     Check if checkpoint directory is complete by monitoring its size stability
     
     Args:
         checkpoint_path: Path to checkpoint directory
-        check_interval: Time interval between checks in seconds
-        max_checks: Maximum number of checks to perform
+        check_interval: Time interval between checks in seconds (15s)
+        max_checks: Maximum number of checks to perform (4 times)
     
     Returns:
         bool: True if directory size remains stable, False otherwise
@@ -38,16 +38,16 @@ def is_checkpoint_complete(checkpoint_path, check_interval=60, max_checks=5):
         print(f"Current size: {current_size / 1024 / 1024:.2f} MB")
         if current_size == previous_size and current_size > 0:
             stable_count += 1
-            print(f"Size remained stable. Stable count: {stable_count}/3")
+            print(f"Size remained stable. Stable count: {stable_count}/2")
         else:
             stable_count = 0
-            print(f"Size changed. Resetting stable count to 0")
+            print(f"Size changed from {previous_size / 1024 / 1024:.2f} MB to {current_size / 1024 / 1024:.2f} MB")
         
         previous_size = current_size
         
-        # Consider complete if size remains stable for 3 consecutive checks
-        if stable_count >= 2:
-            print("Checkpoint appears complete (size stable for 3 consecutive checks)")
+        # Consider complete if size remains stable for 2 consecutive checks
+        if stable_count >= 1:  # Now only need 2 consecutive stable checks
+            print("Checkpoint appears complete (size stable for 2 consecutive checks)")
             return True
             
     print("Checkpoint not yet complete (size still changing)")
