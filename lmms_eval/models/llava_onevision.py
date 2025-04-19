@@ -558,7 +558,6 @@ class Llava_OneVision(lmms):
                 raise e
 
             text_outputs = [response.strip() for response in text_outputs]
-            # print(self.tokenizer.batch_decode(input_ids % self.tokenizer.vocab_size), text_outputs)
             res.extend(text_outputs)
             self.cache_hook.add_partial("generate_until", (context, gen_kwargs), text_outputs)
             pbar.update(1)
