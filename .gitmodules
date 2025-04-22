@@ -1,3 +1,6 @@
 [submodule "transformers"]
 	path = transformers
 	url = https://github.com/huggingface/transformers.git
+[submodule "LLaVA-NeXT"]
+	path = LLaVA-NeXT
+	url = https://github.com/LLaVA-VL/LLaVA-NeXT.git
