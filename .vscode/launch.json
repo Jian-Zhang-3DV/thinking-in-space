@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug lmms_eval ours lora",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "lmms_eval",
+            "console": "integratedTerminal",
+            "env": {
+                "LMMS_EVAL_LAUNCHER": "python",
+                "CUDA_VISIBLE_DEVICES": "3"
+            },
+            "args": [
+                "--model", "vlm_3r",
+                "--model_args", "pretrained=checkpoints/llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token,model_base=lmms-lab/LLaVA-NeXT-Video-7B-Qwen2,video_decode_backend=decord,conv_template=qwen_1_5,max_frames_num=32",
+                "--tasks", "vstrbench",
+                "--batch_size", "1",
+                "--log_samples",
+                "--log_samples_suffix", "vlm_3r_7b_qwen2_32f",
+                "--output_path", "logs/debug/vstrbench"
+            ]
+        },
+        {
+            "name": "Debug lmms_eval ours mlp",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "lmms_eval",
+            "console": "integratedTerminal",
+            "env": {
+                "LMMS_EVAL_LAUNCHER": "python",
+                "CUDA_VISIBLE_DEVICES": "3"
+            },
+            "args": [
+                "--model", "vlm_3r",
+                "--model_args", "pretrained=checkpoints/llava_video_7b_qwen2_last_hidden_state_and_cam_token,model_base=lmms-lab/LLaVA-NeXT-Video-7B-Qwen2,video_decode_backend=decord,conv_template=qwen_1_5,max_frames_num=32",
+                "--tasks", "vstrbench",
+                "--batch_size", "1",
+                "--log_samples",
+                "--log_samples_suffix", "vlm_3r_7b_qwen2_32f",
+                "--output_path", "logs/debug/vstrbench"
+            ]
+        }
+    ]
+}
