@@ -1,12 +1,11 @@
 #!/bin/bash
 
 
-benchmark="vsibench"
+benchmark="${BENCHMARK:-vsibench}"
 model_family="vlm_3r"
-model="llava_video_7b_qwen2_lora_base"
+model="${MODEL:-llava_video_7b_qwen2_lora_base}"
 pretrained="checkpoints/${model}"
-model_base="lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"
-
+model_base="${MODEL_BASE:-}"
 
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 model_args="pretrained=${pretrained},\
