@@ -72,7 +72,7 @@ class Vlm3r(lmms):
         mm_resampler_type: str = "spatial_pool",
         mm_spatial_pool_stride: int = 2,
         mm_spatial_pool_out_channels: int = 1024,
-        mm_spatial_pool_mode: str = "average",
+        mm_spatial_pool_mode: str = "bilinear",
         mm_newline_position: str = "grid",
         mm_pooling_position: str = "after",
         overwrite: bool = True,
