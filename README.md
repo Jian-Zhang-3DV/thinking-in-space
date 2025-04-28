@@ -82,20 +82,19 @@ print(dataset)
 ### Installation
 
 ```bash
-conda create --name vsibench python=3.10
-conda activate vsibench
-
-git clone git@github.com:vision-x-nyu/thinking-in-space.git
+git clone https://github.com/Jian-Zhang-3DV/thinking-in-space.git
 cd thinking-in-space
 
 git submodule update --init --recursive
 
-cd transformers && pip install -e . && cd ..
+conda create --name vsibench python=3.10
+conda activate vsibench
+conda install pytorch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 
 pip install -e .
 pip install s2wrapper@git+https://github.com/bfshi/scaling_on_scales
 pip install deepspeed
-pip install flash-attn --no-build-isolation
+pip install https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.3/flash_attn-2.7.3+cu12torch2.1cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
 pip install transformers==4.40.0
 pip install peft==0.10.0
 ```
