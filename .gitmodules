@@ -4,3 +4,6 @@
 [submodule "LLaVA-NeXT"]
 	path = LLaVA-NeXT
 	url = https://github.com/LLaVA-VL/LLaVA-NeXT.git
+[submodule "VLM-3R"]
+	path = VLM-3R
+	url = https://github.com/Jian-Zhang-3DV/VLM-3R.git

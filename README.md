@@ -95,6 +95,9 @@ cd transformers && pip install -e . && cd ..
 pip install -e .
 pip install s2wrapper@git+https://github.com/bfshi/scaling_on_scales
 pip install deepspeed
+pip install flash-attn --no-build-isolation
+pip install transformers==4.40.0
+pip install peft==0.10.0
 ```
 
 ### Evaluation
