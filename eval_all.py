@@ -17,45 +17,78 @@ BENCHMARKS = [
 ]
 # Path to the script to execute
 SCRIPT_PATH = "./eval_single_node.sh"
+# Directory to store log files
+LOG_DIR = "./evaluation_logs"
 
 # --- Execution ---
 def run_evaluation(benchmark, model, model_base):
-    """Runs the evaluation script with the given benchmark and model."""
+    """Runs the evaluation script with the given benchmark and model, redirecting output to a log file."""
+    # Ensure log directory exists
+    os.makedirs(LOG_DIR, exist_ok=True)
+
+    # Sanitize model name for filename
+    safe_model_name = model.replace("/", "_") # Replace slashes which are invalid in filenames
+    log_filename = f"{benchmark}_{safe_model_name}.log"
+    log_filepath = os.path.join(LOG_DIR, log_filename)
+
     print(f"--- Running Benchmark: {benchmark}, Model: {model}, Model Base: {model_base} ---", flush=True)
-    
+    print(f"--- Logging output to: {log_filepath} ---", flush=True)
+
     # Create a copy of the current environment variables
     env = os.environ.copy()
     # Set the specific variables for the script
     env["BENCHMARK"] = benchmark
     env["MODEL"] = model
     env["MODEL_BASE"] = model_base
+
     try:
-        # Execute the script
-        process = subprocess.run(
-            ["bash", SCRIPT_PATH],
-            env=env,
-            check=True, # Raise an exception if the script returns a non-zero exit code
-            stdout=subprocess.PIPE, # Capture standard output
-            stderr=subprocess.PIPE, # Capture standard error
-            text=True # Decode stdout/stderr as text
-        )
+        # Open the log file in append mode
+        with open(log_filepath, 'a') as log_file:
+            # Execute the script, redirecting stdout and stderr to the log file
+            process = subprocess.run(
+                ["bash", SCRIPT_PATH],
+                env=env,
+                check=True, # Raise an exception if the script returns a non-zero exit code
+                stdout=log_file, # Redirect stdout to the file
+                stderr=log_file, # Redirect stderr to the same file
+                text=True # Decode stdout/stderr as text (though it goes to file now)
+            )
         print(f"Successfully completed Benchmark: {benchmark}, Model: {model}")
-        print("Output:")
-        print(process.stdout)
     except subprocess.CalledProcessError as e:
-        print(f"*** Error running Benchmark: {benchmark}, Model: {model} ***", file=sys.stderr)
-        print(f"Return code: {e.returncode}", file=sys.stderr)
-        print("Stderr:", file=sys.stderr)
-        print(e.stderr, file=sys.stderr)
-        print("Stdout:", file=sys.stderr)
-        print(e.stdout, file=sys.stderr)
+        # Log error messages to the main console as well as the specific log file
+        error_message = f"""
+*** Error running Benchmark: {benchmark}, Model: {model} ***
+Return code: {e.returncode}
+Error details might be in: {log_filepath}
+Check the log file for stdout/stderr from the script.
+"""
+        print(error_message, file=sys.stderr)
+        # Optionally, append error info to the log file if it wasn't captured (e.g., if file open failed)
+        try:
+             with open(log_filepath, 'a') as log_file:
+                 log_file.write("\n--- Subprocess Error Info ---\n")
+                 log_file.write(f"Return code: {e.returncode}\n")
+                 if e.stdout:
+                     log_file.write("Captured Stdout:\n")
+                     log_file.write(e.stdout + "\n")
+                 if e.stderr:
+                     log_file.write("Captured Stderr:\n")
+                     log_file.write(e.stderr + "\n")
+        except Exception as log_err:
+             print(f"*** Additionally, failed to write error details to log file {log_filepath}: {log_err} ***", file=sys.stderr)
+
     except FileNotFoundError:
         print(f"*** Error: Script not found at {SCRIPT_PATH} ***", file=sys.stderr)
     except Exception as e:
         print(f"*** An unexpected error occurred for Benchmark: {benchmark}, Model: {model}: {e} ***", file=sys.stderr)
+        # Also try to log this unexpected error
+        try:
+             with open(log_filepath, 'a') as log_file:
+                 log_file.write(f"\n--- Unexpected Python Error ---\n{str(e)}\n")
+        except Exception as log_err:
+             print(f"*** Additionally, failed to write unexpected error to log file {log_filepath}: {log_err} ***", file=sys.stderr)
     finally:
-        print(f"--- Finished Benchmark: {benchmark}, Model: {model} ---
-", flush=True)
+        print(f"--- Finished Benchmark: {benchmark}, Model: {model} ---", flush=True)
 
 def main():
     if not os.path.exists(SCRIPT_PATH):
@@ -72,7 +105,7 @@ def main():
              sys.exit(1)
 
     print("Starting all evaluations...")
-    total_runs = len(BENCHMARKS) * len(MODELS)
+    total_runs = len(BENCHMARKS) * len(MODELS_and_MODEL_BASES)
     current_run = 0
     for benchmark in BENCHMARKS:
         for model, model_base in MODELS_and_MODEL_BASES:
