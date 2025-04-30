@@ -6,14 +6,15 @@ import time
 # --- Configuration ---
 # Please replace these lists with your actual model and benchmark names
 MODELS_and_MODEL_BASES = [
-    ("llava_video_7b_qwen2_lora_base", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
-    ("llava_video_7b_qwen2_last_hidden_state_and_cam_token", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
-    ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
-    ("lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", ""),
+    # ("llava_video_7b_qwen2_lora_base", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
+    # ("llava_video_7b_qwen2_last_hidden_state_and_cam_token", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
+    # ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
+    # ("LLaVA-Video-7B-Qwen2", ""),
+    ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token_stage1_2", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
 ]
 BENCHMARKS = [
-    "vsibench",
     "vstrbench",
+    "vsibench",
 ]
 # Path to the script to execute
 SCRIPT_PATH = "./eval_single_node.sh"

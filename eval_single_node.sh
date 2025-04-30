@@ -20,7 +20,7 @@ export LMMS_EVAL_LAUNCHER="accelerate"
 
 # 修改启动命令
 accelerate launch \
-    --num_processes=4 \
+    --num_processes=3 \
     -m lmms_eval \
     --model $model_family \
     --model_args $model_args \

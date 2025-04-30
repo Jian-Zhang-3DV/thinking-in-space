@@ -1,0 +1,144 @@
+import subprocess
+import os
+import sys
+import time
+import argparse
+
+# --- Configuration ---
+# Define model configurations including nodes and time limits
+# Format: (model_name, model_base, nodes, time_limit)
+MODELS_and_CONFIGS = [
+    # Example:
+    # ("model_name_1", "base_model_1", 4, "01:00:00"),
+    # ("model_name_2", "base_model_2", 8, "02:30:00"),
+    ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token_stage1_2", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+]
+BENCHMARKS = [
+    "vstrbench",
+    "vsibench",
+]
+# Path to the SLURM script template
+SLURM_SCRIPT_PATH = "./run_eval.slurm"
+# Directory to store log files (optional, SLURM handles its own logs)
+LOG_DIR = "./slurm_submission_logs" # Log for this submission script, not the SLURM jobs themselves
+MODEL_BASE_DIR = "$SCRATCH/work_dirs_auto_eval"
+# --- Functions ---
+def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added nodes and time_limit here
+    """Submits a SLURM job using sbatch and the provided parameters."""
+    # Ensure log directory for this script exists
+    os.makedirs(LOG_DIR, exist_ok=True)
+
+    # Sanitize model name for job name (optional, but can be helpful)
+    safe_model_name = model.replace("/", "_")
+    job_name = f"eval_{benchmark}_{safe_model_name}"
+    # Log file for the sbatch *submission* itself, not the job output
+    submission_log_filename = f"submit_{job_name}.log"
+    submission_log_filepath = os.path.join(LOG_DIR, submission_log_filename)
+
+    print(f"--- Submitting SLURM Job ---", flush=True)
+    print(f"Benchmark: {benchmark}", flush=True)
+    print(f"Model: {model}", flush=True)
+    print(f"Model Base: {model_base}", flush=True)
+    print(f"Nodes: {nodes}", flush=True) # Now specific to this job
+    print(f"Time Limit: {time_limit}", flush=True) # Now specific to this job
+    print(f"SLURM Script: {SLURM_SCRIPT_PATH}", flush=True)
+    print(f"Submission Log: {submission_log_filepath}", flush=True) # Log for the submission process
+
+    # Construct the sbatch command
+    # Note: We override SBATCH directives from the script using command-line options
+    sbatch_command = [
+        "sbatch",
+        f"--job-name={job_name}",
+        f"--nodes={nodes}", # Use job-specific nodes
+        f"--time={time_limit}", # Use job-specific time limit
+        # Add other SBATCH directives if needed, e.g., partition, account
+        # f"--partition=your_partition", # Example
+        SLURM_SCRIPT_PATH, # The script to run
+        # Arguments passed to the SLURM script (run_eval.slurm)
+        f"{MODEL_BASE_DIR}/{model}", # pretrained path argument for run_eval.slurm
+        benchmark,              # benchmark argument for run_eval.slurm
+        model_base              # model_base argument for run_eval.slurm
+    ]
+
+    try:
+        # Open the submission log file
+        with open(submission_log_filepath, 'w') as log_file:
+            cmd_str = ' '.join(sbatch_command)
+            print(f"Executing command: {cmd_str}", flush=True)
+            log_file.write(f"Executing command: {cmd_str}\n")
+            log_file.flush() # Ensure header is written
+
+            # Execute the sbatch command
+            process = subprocess.run(
+                sbatch_command,
+                check=True, # Raise an exception if sbatch fails
+                stdout=log_file, # Capture sbatch output (like job ID)
+                stderr=subprocess.PIPE, # Capture sbatch errors separately
+                text=True
+            )
+            # Log successful submission output (usually contains the Job ID)
+            log_file.write("\n--- sbatch stdout ---\n")
+            log_file.write(process.stdout or "No stdout captured.")
+            print(f"Successfully submitted job for Benchmark: {benchmark}, Model: {model}")
+            print(f"sbatch output: {process.stdout.strip()}") # Show Job ID on console
+
+    except subprocess.CalledProcessError as e:
+        # Define the error message using an f-string
+        error_message = (
+            f"*** Error submitting SLURM job for Benchmark: {benchmark}, Model: {model} ***\n"
+            f"Return code: {e.returncode}\n"
+            f"Command: {' '.join(e.cmd)}\n"
+            f"Stderr:\n{e.stderr}\n"
+            f"Check submission log for details: {submission_log_filepath}\n"
+        )
+        print(error_message, file=sys.stderr)
+        # Ensure the error is also in the submission log
+        try:
+             with open(submission_log_filepath, 'a') as log_file:
+                 log_file.write("\n--- sbatch stderr ---\n")
+                 log_file.write(e.stderr or "No stderr captured.")
+        except Exception as log_err:
+             print(f"*** Additionally, failed to write sbatch error details to log file {submission_log_filepath}: {log_err} ***", file=sys.stderr)
+
+    except FileNotFoundError:
+        print(f"*** Error: sbatch command not found, or SLURM script not found at {SLURM_SCRIPT_PATH} ***", file=sys.stderr)
+
+    except Exception as e:
+        print(f"*** An unexpected error occurred during submission for Benchmark: {benchmark}, Model: {model}: {e} ***", file=sys.stderr)
+        # Also try to log this unexpected error
+        try:
+             with open(submission_log_filepath, 'a') as log_file:
+                 log_file.write(f"\n--- Unexpected Python Error During Submission ---\n{str(e)}\n")
+        except Exception as log_err:
+             print(f"*** Additionally, failed to write unexpected error to submission log file {submission_log_filepath}: {log_err} ***", file=sys.stderr)
+
+    finally:
+        print(f"--- Finished processing submission for Benchmark: {benchmark}, Model: {model} ---", flush=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Submit multiple SLURM evaluation jobs with individual configurations.")
+    # Removed --nodes and --time arguments
+    args = parser.parse_args() # Parse remaining arguments if any are added later
+
+    if not os.path.exists(SLURM_SCRIPT_PATH):
+        print(f"Error: SLURM script '{SLURM_SCRIPT_PATH}' not found.", file=sys.stderr)
+        sys.exit(1)
+
+    print("Starting all SLURM job submissions...")
+    total_submissions = len(BENCHMARKS) * len(MODELS_and_CONFIGS) # Use renamed list
+    current_submission = 0
+    for benchmark in BENCHMARKS:
+        # Unpack model, base, nodes, and time limit from the config list
+        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS: # Use renamed list and unpack new values
+            current_submission += 1
+            print(f"=== Submitting Job {current_submission}/{total_submissions} ===")
+            # Pass the specific nodes and time_limit to submit_slurm_job
+            submit_slurm_job(benchmark, model, model_base, nodes, time_limit)
+            # Optional: Add a small delay between submissions if needed
+            # time.sleep(1)
+
+    print("--- All SLURM job submissions completed ---")
+
+if __name__ == "__main__":
+    main() 

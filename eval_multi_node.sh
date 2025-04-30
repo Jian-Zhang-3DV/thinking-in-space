@@ -28,7 +28,18 @@ echo "MASTER_PORT = $MASTER_PORT"
 # hard code
 max_frames_num=32
 model_family="vlm_3r"
-model="vlm_3r_7b_qwen2_${max_frames_num}f"
+# Extract model name from pretrained path for log suffix (handles checkpoint dirs)
+# Remove trailing slash if present
+cleaned_path=${pretrained%/}
+last_component=$(basename "$cleaned_path")
+if [[ "$last_component" == checkpoint-* ]]; then
+    parent_dir=$(dirname "$cleaned_path")
+    parent_name=$(basename "$parent_dir")
+    log_suffix_model_name="${parent_name}_${last_component}"
+else
+    log_suffix_model_name="$last_component"
+fi
+
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
 
 # 基础参数
@@ -57,5 +68,5 @@ accelerate launch \
     --tasks $benchmark \
     --batch_size 1 \
     --log_samples \
-    --log_samples_suffix $model \
+    --log_samples_suffix $log_suffix_model_name \
     --output_path $output_path/$benchmark

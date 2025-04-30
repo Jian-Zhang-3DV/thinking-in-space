@@ -106,7 +106,7 @@ def vsibench_process_results(doc, results):
     doc['prediction'] = results[0]
     if doc['question_type'] in MCA_QUESTION_TYPES:
         for key, value in METRICS_FOR_MCA.items():
-            doc[key] = eval(value)(fuzzy_matching(doc['prediction']), doc['ground_truth'])
+            doc[key] = eval(value)(fuzzy_matching(doc['prediction']), doc['mc_answer'])
     elif doc['question_type'] in NA_QUESTION_TYPES:
         for key, value in METRICS_FOR_NA.items():
             try:
