@@ -11,10 +11,10 @@ MODELS_and_CONFIGS = [
     # Example:
     # ("model_name_1", "base_model_1", 4, "01:00:00"),
     # ("model_name_2", "base_model_2", 8, "02:30:00"),
-    ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token_stage1_2", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_04_30_lora_base/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 2, "01:00:00"), # Added example nodes and time
 ]
 BENCHMARKS = [
-    "vstrbench",
+    # "vstrbench",
     "vsibench",
 ]
 # Path to the SLURM script template
