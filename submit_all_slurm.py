@@ -82,15 +82,22 @@ def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added n
             process = subprocess.run(
                 sbatch_command,
                 check=True, # Raise an exception if sbatch fails
-                stdout=log_file, # Capture sbatch output (like job ID)
+                stdout=subprocess.PIPE, # Capture sbatch output (like job ID)
                 stderr=subprocess.PIPE, # Capture sbatch errors separately
                 text=True
             )
             # Log successful submission output (usually contains the Job ID)
             log_file.write("\n--- sbatch stdout ---\n")
-            log_file.write(process.stdout or "No stdout captured.")
+            captured_stdout = process.stdout or "No stdout captured." # Handle potential None
+            log_file.write(captured_stdout + "\n") # Add newline for log readability
+            log_file.flush() # Ensure stdout is written to log
+
             print(f"Successfully submitted job for Benchmark: {benchmark}, Model: {model}")
-            print(f"sbatch output: {process.stdout.strip()}") # Show Job ID on console
+            # Check if stdout was captured before stripping
+            if process.stdout:
+                 print(f"sbatch output: {process.stdout.strip()}") # Show Job ID on console
+            else:
+                 print("sbatch output: (Not captured or empty)")
 
     except subprocess.CalledProcessError as e:
         # Define the error message using an f-string
