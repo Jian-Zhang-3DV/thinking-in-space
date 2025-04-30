@@ -31,18 +31,25 @@ def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added n
     # Sanitize model name for job name (optional, but can be helpful)
     safe_model_name = model.replace("/", "_")
     job_name = f"eval_{benchmark}_{safe_model_name}"
-    # Log file for the sbatch *submission* itself, not the job output
+    # Log file for the sbatch *submission* itself, AND the job output/error
     submission_log_filename = f"submit_{job_name}.log"
     submission_log_filepath = os.path.join(LOG_DIR, submission_log_filename)
+
+    # Expand the environment variable in the base directory path
+    expanded_model_base_dir = os.path.expandvars(MODEL_BASE_DIR)
+    # Construct the full path to the pretrained model
+    pretrained_path = os.path.join(expanded_model_base_dir, model)
 
     print(f"--- Submitting SLURM Job ---", flush=True)
     print(f"Benchmark: {benchmark}", flush=True)
     print(f"Model: {model}", flush=True)
     print(f"Model Base: {model_base}", flush=True)
+    print(f"Pretrained Path (expanded): {pretrained_path}", flush=True) # Print the expanded path
     print(f"Nodes: {nodes}", flush=True) # Now specific to this job
     print(f"Time Limit: {time_limit}", flush=True) # Now specific to this job
     print(f"SLURM Script: {SLURM_SCRIPT_PATH}", flush=True)
-    print(f"Submission Log: {submission_log_filepath}", flush=True) # Log for the submission process
+    # Update print statement: This file will contain both submission and job logs
+    print(f"Combined Submission and Job Log: {submission_log_filepath}", flush=True)
 
     # Construct the sbatch command
     # Note: We override SBATCH directives from the script using command-line options
@@ -51,17 +58,20 @@ def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added n
         f"--job-name={job_name}",
         f"--nodes={nodes}", # Use job-specific nodes
         f"--time={time_limit}", # Use job-specific time limit
+        f"--output={submission_log_filepath}", # Send job stdout to the submission log file
+        f"--error={submission_log_filepath}",  # Send job stderr to the submission log file
+        "--open-mode=append",             # Append job output/error to the file
         # Add other SBATCH directives if needed, e.g., partition, account
         # f"--partition=your_partition", # Example
         SLURM_SCRIPT_PATH, # The script to run
         # Arguments passed to the SLURM script (run_eval.slurm)
-        f"{MODEL_BASE_DIR}/{model}", # pretrained path argument for run_eval.slurm
+        pretrained_path,        # Use the expanded path
         benchmark,              # benchmark argument for run_eval.slurm
         model_base              # model_base argument for run_eval.slurm
     ]
 
     try:
-        # Open the submission log file
+        # Open the submission log file (in write mode, will overwrite if exists)
         with open(submission_log_filepath, 'w') as log_file:
             cmd_str = ' '.join(sbatch_command)
             print(f"Executing command: {cmd_str}", flush=True)
