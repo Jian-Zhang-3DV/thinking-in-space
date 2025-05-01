@@ -99,8 +99,7 @@ def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added n
              # Optionally log this error to the submission log file before proceeding
              try:
                  with open(submission_log_filepath, 'a') as log_file:
-                     log_file.write(f"
---- Pre-check Warning ---
+                     log_file.write(f"--- Pre-check Warning ---
 Failed to calculate directory size accurately for {pretrained_path}. Proceeding without stability confirmation.
 ")
              except Exception as log_err:
