@@ -16,13 +16,13 @@ MODELS_and_CONFIGS = [
     # ("llava_video_7b_qwen2_04_30_lora_last_hidden_state/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
