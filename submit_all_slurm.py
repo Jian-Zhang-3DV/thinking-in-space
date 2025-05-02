@@ -38,7 +38,7 @@ MODEL_BASE_DIR = "$SCRATCH/work_dirs_auto_eval"
 WAIT_CHECK_INTERVAL = 60  # seconds (How often to check for directory existence)
 SIZE_CHECK_INTERVAL = 30  # seconds (How often to check directory size)
 STABILITY_DURATION = 120 # seconds (How long size must be stable before proceeding)
-MAX_WAIT_TIME = 600 # seconds (Maximum time to wait for directory to exist, e.g., 10 minutes)
+MAX_WAIT_TIME = 86400 # seconds (Maximum time to wait for directory to exist, e.g., 1 day)
 
 
 # --- Helper Function ---
