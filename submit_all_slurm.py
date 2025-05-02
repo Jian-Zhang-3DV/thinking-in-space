@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import argparse
+import multiprocessing
 
 # --- Configuration ---
 # Define model configurations including nodes and time limits
@@ -16,7 +17,7 @@ MODELS_and_CONFIGS = [
     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
 
@@ -256,28 +257,45 @@ Failed to calculate directory size accurately for {pretrained_path}. Proceeding 
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Submit multiple SLURM evaluation jobs with individual configurations.")
-    # Removed --nodes and --time arguments
-    args = parser.parse_args() # Parse remaining arguments if any are added later
+    parser = argparse.ArgumentParser(description="Submit multiple SLURM evaluation jobs with individual configurations in parallel.")
+    parser.add_argument(
+        '--parallel-jobs', 
+        type=int, 
+        default=4, 
+        help='Number of job checks/submissions to run in parallel.'
+    )
+    # Removed --nodes and --time arguments as they are per-job now
+    args = parser.parse_args()
 
     if not os.path.exists(SLURM_SCRIPT_PATH):
         print(f"Error: SLURM script '{SLURM_SCRIPT_PATH}' not found.", file=sys.stderr)
         sys.exit(1)
 
-    print("Starting all SLURM job submissions...")
-    total_submissions = len(BENCHMARKS) * len(MODELS_and_CONFIGS) # Use renamed list
-    current_submission = 0
+    # --- Prepare Tasks --- 
+    tasks_to_run = []
     for benchmark in BENCHMARKS:
-        # Unpack model, base, nodes, and time limit from the config list
-        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS: # Use renamed list and unpack new values
-            current_submission += 1
-            print(f"=== Submitting Job {current_submission}/{total_submissions} ===")
-            # Pass the specific nodes and time_limit to submit_slurm_job
-            submit_slurm_job(benchmark, model, model_base, nodes, time_limit)
-            # Optional: Add a small delay between submissions if needed
-            # time.sleep(1)
+        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS:
+            tasks_to_run.append((benchmark, model, model_base, nodes, time_limit))
+    
+    total_submissions = len(tasks_to_run)
+    print(f"Found {total_submissions} total jobs to process.")
+    print(f"Running up to {args.parallel_jobs} checks/submissions in parallel...")
 
-    print("--- All SLURM job submissions completed ---")
+    # --- Execute Tasks in Parallel --- 
+    # Ensure log directory exists before starting workers
+    os.makedirs(LOG_DIR, exist_ok=True) 
+
+    if total_submissions > 0:
+        # Create a pool of worker processes
+        with multiprocessing.Pool(processes=args.parallel_jobs) as pool:
+            # Use starmap to pass arguments from each tuple in tasks_to_run to submit_slurm_job
+            # This will block until all tasks are complete
+            pool.starmap(submit_slurm_job, tasks_to_run)
+        print("--- All parallel submission processes finished. --- ")
+    else:
+        print("No jobs found in configuration. Exiting.")
+
 
 if __name__ == "__main__":
+    # Need this guard for multiprocessing on some OSes
     main() 
