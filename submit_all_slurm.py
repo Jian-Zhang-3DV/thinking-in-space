@@ -13,12 +13,12 @@ MODELS_and_CONFIGS = [
     # ("model_name_2", "base_model_2", 8, "02:30:00"),
     # ("llava_video_7b_qwen2_04_30_lora_base/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_04_30_lora_last_hidden_state/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:30:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
     ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
 
 ]
 BENCHMARKS = [
@@ -35,6 +35,7 @@ MODEL_BASE_DIR = "$SCRATCH/work_dirs_auto_eval"
 WAIT_CHECK_INTERVAL = 60  # seconds (How often to check for directory existence)
 SIZE_CHECK_INTERVAL = 30  # seconds (How often to check directory size)
 STABILITY_DURATION = 120 # seconds (How long size must be stable before proceeding)
+MAX_WAIT_TIME = 600 # seconds (Maximum time to wait for directory to exist, e.g., 10 minutes)
 
 
 # --- Helper Function ---
@@ -81,11 +82,38 @@ def submit_slurm_job(benchmark, model, model_base, nodes, time_limit): # Added n
     # --- Pre-submission Checks ---
     print(f"--- Pre-check for: {pretrained_path} ---", flush=True)
 
-    # 1. Wait for the directory to exist
-    while not os.path.exists(pretrained_path):
-        print(f"Directory not found: {pretrained_path}. Waiting {WAIT_CHECK_INTERVAL}s...", flush=True)
-        time.sleep(WAIT_CHECK_INTERVAL)
-    print(f"Directory found: {pretrained_path}. Checking for size stability...", flush=True)
+    # 1. Wait for the directory to exist, with a timeout
+    wait_start_time = time.time()
+    directory_exists = False
+    while time.time() - wait_start_time < MAX_WAIT_TIME:
+        if os.path.exists(pretrained_path):
+            directory_exists = True
+            print(f"Directory found: {pretrained_path}. Checking for size stability...", flush=True)
+            break
+        else:
+            elapsed_wait = time.time() - wait_start_time
+            # Check remaining time before sleeping
+            remaining_time = MAX_WAIT_TIME - elapsed_wait
+            wait_this_interval = min(WAIT_CHECK_INTERVAL, remaining_time)
+            if wait_this_interval <= 0: # No more time left to wait
+                 break
+            print(f"Directory not found: {pretrained_path}. Waiting {wait_this_interval:.1f}s... (Elapsed: {elapsed_wait:.1f}/{MAX_WAIT_TIME}s)", flush=True)
+            time.sleep(wait_this_interval) # Sleep for the calculated interval
+
+    if not directory_exists:
+        error_message = f"*** Error: Timeout waiting for directory {pretrained_path} to exist after {MAX_WAIT_TIME}s. Skipping job submission for Benchmark: {benchmark}, Model: {model} ***"
+        print(error_message, file=sys.stderr, flush=True)
+        try:
+            # Append timeout error to the log file designated for this job's submission attempt
+            with open(submission_log_filepath, 'a') as log_file:
+                log_file.write(f"--- Pre-check Error ---\n{error_message}\n")
+                log_file.flush() # Ensure error is written
+        except Exception as log_err:
+            print(f"*** Additionally, failed to write timeout error to log file {submission_log_filepath}: {log_err} ***", file=sys.stderr)
+        # Skip the rest of the submission process for this job
+        print(f"--- Skipping submission for Benchmark: {benchmark}, Model: {model} due to timeout ---", flush=True)
+        return # Exit this function call and proceed to the next job in main()
+
 
     # 2. Wait for directory size to stabilize
     last_size = -1 # Initialize with a value that won't match the first check
