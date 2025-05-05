@@ -25,10 +25,19 @@ MODELS_and_CONFIGS = [
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+    # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
 ]
 BENCHMARKS = [
     # "vstrbench",
@@ -41,9 +50,9 @@ LOG_DIR = "./slurm_submission_logs" # Log for this submission script, not the SL
 MODEL_BASE_DIR = "$SCRATCH/work_dirs_auto_eval"
 
 # --- New Configuration for Pre-check ---
-WAIT_CHECK_INTERVAL = 60  # seconds (How often to check for directory existence)
-SIZE_CHECK_INTERVAL = 30  # seconds (How often to check directory size)
-STABILITY_DURATION = 120 # seconds (How long size must be stable before proceeding)
+WAIT_CHECK_INTERVAL = 10  # seconds (How often to check for directory existence)
+SIZE_CHECK_INTERVAL = 10  # seconds (How often to check directory size)
+STABILITY_DURATION = 10 # seconds (How long size must be stable before proceeding)
 MAX_WAIT_TIME = 86400 # seconds (Maximum time to wait for directory to exist, e.g., 1 day)
 
 
@@ -269,7 +278,7 @@ def main():
     parser.add_argument(
         '--parallel-jobs', 
         type=int, 
-        default=4, 
+        default=16, 
         help='Number of job checks/submissions to run in parallel.'
     )
     # Removed --nodes and --time arguments as they are per-job now

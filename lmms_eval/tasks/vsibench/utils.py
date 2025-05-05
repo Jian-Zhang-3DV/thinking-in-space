@@ -71,14 +71,30 @@ def vsibench_doc_to_text(doc, lmms_eval_specific_kwargs=None):
 
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
-    # 筛选 object_abs_distance 和 object_rel_distance 类型的问题
-    # dataset = dataset.filter(lambda x: x['question_type'] in ['object_abs_distance', 'object_rel_distance'])
+    # 对每个问题类型随机采样20%的数据
+    question_types = dataset.unique('question_type')
+    sampled_indices = []
+    
+    for q_type in question_types:
+        type_indices = [i for i, item in enumerate(dataset) if item['question_type'] == q_type]
+        # 随机采样20%的数据
+        sample_size = max(1, int(len(type_indices) * 0.2))
+        import random
+        random.seed(42)  # 确保可重复性
+        sampled_type_indices = random.sample(type_indices, sample_size)
+        sampled_indices.extend(sampled_type_indices)
+    
+    # 按照原始顺序排序采样的索引
+    sampled_indices.sort()
+    
+    # 使用选定的索引创建新数据集
+    sampled_dataset = dataset.select(sampled_indices)
     
     if os.getenv('LMMS_EVAL_SHUFFLE_DOCS', None):
         eval_logger.info(f"Environment variable LMMS_EVAL_SHUFFLE_DOCS detected, dataset will be shuffled.")
-        return dataset.shuffle(seed=42)
+        return sampled_dataset.shuffle(seed=42)
     
-    return dataset
+    return sampled_dataset
 
 def fuzzy_matching(pred):
     return pred.split(' ')[0].rstrip('.').strip()
