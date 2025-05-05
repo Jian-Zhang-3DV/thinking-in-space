@@ -38,7 +38,7 @@ MODELS_and_CONFIGS = [
     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    ("llava_qwen2_7b_stage2_cut3r_lora_all_token_transformer/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+    ("llava_qwen2_7b_stage2_cut3r_lora_all_token_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
 ]
 BENCHMARKS = [
     # "vstrbench",
