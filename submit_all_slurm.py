@@ -41,7 +41,15 @@ MODELS_and_CONFIGS = [
     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
     # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_07_vggt_all_tokens_cross_attn_lora_6tasks/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+    ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+
 
 ]
 BENCHMARKS = [
