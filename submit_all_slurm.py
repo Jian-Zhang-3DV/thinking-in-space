@@ -62,6 +62,7 @@ SLURM_SCRIPT_PATH = "./run_eval.slurm"
 # Directory to store log files (optional, SLURM handles its own logs)
 LOG_DIR = "./slurm_submission_logs" # Log for this submission script, not the SLURM jobs themselves
 MODEL_BASE_DIR = "$SCRATCH/work_dirs_auto_eval"
+DISCOVERY_INTERVAL_SECONDS = 600  # Check every 10 minutes by default
 
 # --- New Configuration for Pre-check ---
 WAIT_CHECK_INTERVAL = 10  # seconds (How often to check for directory existence)
@@ -120,12 +121,12 @@ def discover_models_and_configs():
                         nodes = 8 if "_base" in item else 16
                         
                         discovered_configs.append((model_checkpoint_name, base_model_path, nodes, time_limit))
-                        print(f"  + Discovered: {model_checkpoint_name}, Nodes: {nodes}, Time: {time_limit}", flush=True)
+                        # Removed print from here: print(f"  + Discovered: {model_checkpoint_name}, Nodes: {nodes}, Time: {time_limit}", flush=True)
                         
     if not discovered_configs:
-        print(f"No matching models/checkpoints found in {expanded_model_base_dir} for date >= {min_month:02}_{min_day:02}", flush=True)
+        print(f"No matching models/checkpoints found in {expanded_model_base_dir} for date >= {min_month:02}_{min_day:02} during this discovery scan.", flush=True)
     else:
-        print(f"--- Finished model discovery. Found {len(discovered_configs)} configurations. ---", flush=True)
+        print(f"--- Finished model discovery scan. Found {len(discovered_configs)} potential configurations. ---", flush=True)
     return discovered_configs
 
 
@@ -347,45 +348,80 @@ Failed to calculate directory size accurately for {pretrained_path}. Proceeding 
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Submit multiple SLURM evaluation jobs with individual configurations in parallel.")
+    parser = argparse.ArgumentParser(description="Submit multiple SLURM evaluation jobs with individual configurations in parallel, continuously monitoring for new models.")
     parser.add_argument(
         '--parallel-jobs', 
         type=int, 
         default=16, 
-        help='Number of job checks/submissions to run in parallel.'
+        help='Number of job checks/submissions to run in parallel for each discovery cycle.'
     )
-    # Removed --nodes and --time arguments as they are per-job now
+    parser.add_argument(
+        '--discovery-interval',
+        type=int,
+        default=DISCOVERY_INTERVAL_SECONDS,
+        help='Seconds between checking for new models.'
+    )
     args = parser.parse_args()
 
     if not os.path.exists(SLURM_SCRIPT_PATH):
         print(f"Error: SLURM script '{SLURM_SCRIPT_PATH}' not found.", file=sys.stderr)
         sys.exit(1)
 
-    # --- Discover Models and Prepare Tasks ---
-    MODELS_and_CONFIGS = discover_models_and_configs() # Dynamically discover models
+    os.makedirs(LOG_DIR, exist_ok=True) # Ensure log dir for this script
 
-    tasks_to_run = []
-    for benchmark in BENCHMARKS:
-        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS: # Use discovered configs
-            tasks_to_run.append((benchmark, model, model_base, nodes, time_limit))
-    
-    total_submissions = len(tasks_to_run)
-    print(f"Found {total_submissions} total jobs to process.")
-    print(f"Running up to {args.parallel_jobs} checks/submissions in parallel...")
+    submitted_job_identifiers = set() # Stores (benchmark, model_checkpoint_name)
 
-    # --- Execute Tasks in Parallel --- 
-    # Ensure log directory exists before starting workers
-    os.makedirs(LOG_DIR, exist_ok=True) 
+    print(f"--- Starting continuous SLURM job submitter ---")
+    print(f"Monitoring directory: {os.path.expandvars(MODEL_BASE_DIR)}")
+    print(f"Checking for new models every {args.discovery_interval} seconds.")
+    print(f"SLURM script: {SLURM_SCRIPT_PATH}")
+    print(f"Benchmarks to run: {', '.join(BENCHMARKS)}")
+    print(f"Press Ctrl+C to stop.")
 
-    if total_submissions > 0:
-        # Create a pool of worker processes
-        with multiprocessing.Pool(processes=args.parallel_jobs) as pool:
-            # Use starmap to pass arguments from each tuple in tasks_to_run to submit_slurm_job
-            # This will block until all tasks are complete
-            pool.starmap(submit_slurm_job, tasks_to_run)
-        print("--- All parallel submission processes finished. --- ")
-    else:
-        print("No jobs found in configuration. Exiting.")
+    try:
+        while True:
+            print(f"--- [{time.ctime()}] Starting new discovery cycle ---", flush=True)
+            current_discovered_configs = discover_models_and_configs()
+            
+            new_tasks_for_this_cycle = []
+            if BENCHMARKS and current_discovered_configs: # Only proceed if there are benchmarks and discovered models
+                for benchmark in BENCHMARKS:
+                    for model_checkpoint_name, model_base_path, nodes, time_cfg in current_discovered_configs:
+                        job_identifier = (benchmark, model_checkpoint_name)
+                        if job_identifier not in submitted_job_identifiers:
+                            new_tasks_for_this_cycle.append((benchmark, model_checkpoint_name, model_base_path, nodes, time_cfg))
+                            print(f"  + New task identified for submission: {model_checkpoint_name} (Benchmark: {benchmark}, Nodes: {nodes}, Time: {time_cfg})", flush=True)
+            
+            if new_tasks_for_this_cycle:
+                print(f"Found {len(new_tasks_for_this_cycle)} new job(s) to process in this cycle.", flush=True)
+                
+                # Add to submitted_job_identifiers *before* attempting submission with the pool.
+                # This marks them as "processed" by this script instance for future cycles.
+                for task_params in new_tasks_for_this_cycle:
+                    benchmark_arg, model_ckpt_name_arg, _, _, _ = task_params
+                    submitted_job_identifiers.add((benchmark_arg, model_ckpt_name_arg))
+
+                if args.parallel_jobs > 0:
+                    print(f"Submitting new jobs in parallel (up to {args.parallel_jobs} processes)...", flush=True)
+                    with multiprocessing.Pool(processes=args.parallel_jobs) as pool:
+                        pool.starmap(submit_slurm_job, new_tasks_for_this_cycle)
+                    print(f"--- Finished processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
+                elif len(new_tasks_for_this_cycle) > 0 : # if parallel_jobs is 0 but there are tasks
+                     print("Parallel jobs set to 0 by argument. Sequentially processing new jobs...", flush=True)
+                     for task_args in new_tasks_for_this_cycle:
+                         submit_slurm_job(*task_args) 
+                     print(f"--- Finished sequentially processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
+                # If parallel_jobs is 0 and no new_tasks, this block is skipped.
+            else:
+                print("No new models/checkpoints found requiring submission in this cycle.", flush=True)
+
+            print(f"--- [{time.ctime()}] Discovery cycle complete. Sleeping for {args.discovery_interval} seconds... ---", flush=True)
+            time.sleep(args.discovery_interval)
+            
+    except KeyboardInterrupt:
+        print("--- Script interrupted by user. Shutting down... ---", flush=True)
+    finally:
+        print("--- SLURM job submitter exited. ---", flush=True)
 
 
 if __name__ == "__main__":
