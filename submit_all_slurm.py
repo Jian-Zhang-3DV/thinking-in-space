@@ -4,54 +4,55 @@ import sys
 import time
 import argparse
 import multiprocessing
+import re # Added import
 
 # --- Configuration ---
 # Define model configurations including nodes and time limits
 # Format: (model_name, model_base, nodes, time_limit)
-MODELS_and_CONFIGS = [
-    # Example:
-    # ("model_name_1", "base_model_1", 4, "01:00:00"),
-    # ("model_name_2", "base_model_2", 8, "02:30:00"),
-    # ("llava_video_7b_qwen2_04_30_lora_base/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_04_30_lora_last_hidden_state/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
-    # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-    ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
-
-
-]
+# MODELS_and_CONFIGS = [
+#     # Example:
+#     # ("model_name_1", "base_model_1", 4, "01:00:00"),
+#     # ("model_name_2", "base_model_2", 8, "02:30:00"),
+#     # ("llava_video_7b_qwen2_04_30_lora_base/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_04_30_lora_last_hidden_state/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_base_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_01_lora_patch_tokens_2_layer_cross_attn/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_mlp/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-2100", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-700", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_cut3r_points_lora_video_3d_llm/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:30:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage2_lora_base/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-1000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-2000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_04_stage1_2_lora_clip_vggt_mlp/checkpoint-3000", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 4, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_02_lora_patch_tokens_cross_attn_2_layers_mlp_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora_diff_lr/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_06_cut3r_all_tokens_cross_attn_lora/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-900", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_base_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 8, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist_3h/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_08_cut3r_all_tokens_cross_attn_lora_more_rel_dist/checkpoint-1800", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+#     # ("llava_video_7b_qwen2_05_09_cut3r_all_tokens_cross_attn_lora_more_appr_order/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
+# 
+# ]
 BENCHMARKS = [
     # "vstrbench",
     "vsibench",
@@ -67,6 +68,65 @@ WAIT_CHECK_INTERVAL = 10  # seconds (How often to check for directory existence)
 SIZE_CHECK_INTERVAL = 10  # seconds (How often to check directory size)
 STABILITY_DURATION = 10 # seconds (How long size must be stable before proceeding)
 MAX_WAIT_TIME = 86400 # seconds (Maximum time to wait for directory to exist, e.g., 1 day)
+
+
+# --- Auto Discover Models and Configs ---
+def discover_models_and_configs():
+    """
+    Automatically discovers model checkpoints and generates configurations.
+    Searches for models matching 'llava_video_7b_qwen2_' with date >= 05_09.
+    Assigns 8 nodes for 'base' models, 16 for others. Time limit is 1 hour.
+    """
+    discovered_configs = []
+    base_model_path = "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"
+    time_limit = "01:00:00"
+    min_month = 5
+    min_day = 9
+
+    expanded_model_base_dir = os.path.expandvars(MODEL_BASE_DIR)
+    if not os.path.isdir(expanded_model_base_dir):
+        print(f"Warning: MODEL_BASE_DIR '{expanded_model_base_dir}' does not exist or is not a directory. Cannot discover models.", file=sys.stderr, flush=True)
+        return []
+
+    print(f"--- Discovering models in: {expanded_model_base_dir} ---", flush=True)
+    
+    # Regex to capture model name and date part (e.g., llava_video_7b_qwen2_05_09_...)
+    # It looks for llava_video_7b_qwen2_ followed by MM_DD (month and day)
+    model_name_pattern = re.compile(r"^(llava_video_7b_qwen2_(\d{2})_(\d{2})_.+)$")
+    checkpoint_pattern = re.compile(r"^checkpoint-\d+$")
+
+    for item in os.listdir(expanded_model_base_dir):
+        item_path = os.path.join(expanded_model_base_dir, item)
+        if os.path.isdir(item_path):
+            match = model_name_pattern.match(item)
+            if match:
+                model_prefix_with_date = match.group(1) # full model name part e.g. llava_video_7b_qwen2_05_09_base_lora
+                month = int(match.group(2))
+                day = int(match.group(3))
+
+                # Check date condition
+                if month < min_month or (month == min_month and day < min_day):
+                    # print(f"Skipping model {item}: date {month:02}_{day:02} is before {min_month:02}_{min_day:02}", flush=True)
+                    continue
+                
+                # print(f"Found model directory: {item}, checking for checkpoints...", flush=True)
+                
+                for sub_item in os.listdir(item_path):
+                    sub_item_path = os.path.join(item_path, sub_item)
+                    if os.path.isdir(sub_item_path) and checkpoint_pattern.match(sub_item):
+                        # Construct the model name to be used in SLURM job (model_folder/checkpoint_folder)
+                        model_checkpoint_name = f"{item}/{sub_item}"
+                        
+                        nodes = 8 if "_base" in item else 16
+                        
+                        discovered_configs.append((model_checkpoint_name, base_model_path, nodes, time_limit))
+                        print(f"  + Discovered: {model_checkpoint_name}, Nodes: {nodes}, Time: {time_limit}", flush=True)
+                        
+    if not discovered_configs:
+        print(f"No matching models/checkpoints found in {expanded_model_base_dir} for date >= {min_month:02}_{min_day:02}", flush=True)
+    else:
+        print(f"--- Finished model discovery. Found {len(discovered_configs)} configurations. ---", flush=True)
+    return discovered_configs
 
 
 # --- Helper Function ---
@@ -301,10 +361,12 @@ def main():
         print(f"Error: SLURM script '{SLURM_SCRIPT_PATH}' not found.", file=sys.stderr)
         sys.exit(1)
 
-    # --- Prepare Tasks --- 
+    # --- Discover Models and Prepare Tasks ---
+    MODELS_and_CONFIGS = discover_models_and_configs() # Dynamically discover models
+
     tasks_to_run = []
     for benchmark in BENCHMARKS:
-        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS:
+        for model, model_base, nodes, time_limit in MODELS_and_CONFIGS: # Use discovered configs
             tasks_to_run.append((benchmark, model, model_base, nodes, time_limit))
     
     total_submissions = len(tasks_to_run)
