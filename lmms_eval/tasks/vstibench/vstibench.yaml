@@ -4,7 +4,7 @@ dataset_kwargs:
   cache_dir: vstrbench
   video: True
 task: vstrbench
-test_split: test
+test_split: val
 output_type: generate_until
 process_docs: !function utils.process_docs
 doc_to_visual: !function utils.vsibench_doc_to_visual
