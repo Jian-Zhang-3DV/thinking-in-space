@@ -1,10 +1,11 @@
-dataset_path: Journey9ni/vsdrbench
+dataset_path: Journey9ni/vstibench
 dataset_kwargs:
   token: True
-  cache_dir: vstrbench
+  cache_dir: vstibench
   video: True
-task: vstrbench
-test_split: val
+  force_download: True
+task: vstibench
+test_split: test
 output_type: generate_until
 process_docs: !function utils.process_docs
 doc_to_visual: !function utils.vsibench_doc_to_visual
