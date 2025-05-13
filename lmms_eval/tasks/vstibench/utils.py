@@ -9,13 +9,12 @@ import pandas as pd
 import datasets
 
 MCA_QUESTION_TYPES = [
-    "camera_obj_rel_dir",
-    "camera_obj_rel_dist"
+    "obj_obj_relative_pos_nf",
+    "obj_obj_relative_pos_ud",
+    "obj_obj_relative_pos_lr",
 ]
 NA_QUESTION_TYPES = [
     "camera_obj_abs_dist",
-    "camera_displacement",
-    "camera_obj_dist_change",
 ]
 
 METRICS_FOR_MCA = {
