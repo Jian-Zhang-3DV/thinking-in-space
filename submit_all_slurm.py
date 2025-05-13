@@ -53,10 +53,10 @@ import re # Added import
 #     # ("llava_video_7b_qwen2_05_09_cut3r_all_tokens_cross_attn_lora_more_appr_order/checkpoint-1400", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2", 16, "01:00:00"), # Added example nodes and time
 # 
 # ]
-BENCHMARKS = [
-    # "vstrbench",
-    "vsibench",
-]
+# BENCHMARKS = [ # REMOVED
+#     # "vstibench",
+#     "vsibench",
+# ]
 # Path to the SLURM script template
 SLURM_SCRIPT_PATH = "./run_eval.slurm"
 # Directory to store log files (optional, SLURM handles its own logs)
@@ -75,14 +75,14 @@ MAX_WAIT_TIME = 86400 # seconds (Maximum time to wait for directory to exist, e.
 def discover_models_and_configs():
     """
     Automatically discovers model checkpoints and generates configurations.
-    Searches for models matching 'llava_video_7b_qwen2_' with date >= 05_09.
+    Searches for models matching 'llava_video_7b_qwen2_' with date >= 05_12.
     Assigns 8 nodes for 'base' models, 16 for others. Time limit is 1 hour.
     """
     discovered_configs = []
     base_model_path = "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"
     time_limit = "01:00:00"
     min_month = 5
-    min_day = 9
+    min_day = 12
 
     expanded_model_base_dir = os.path.expandvars(MODEL_BASE_DIR)
     if not os.path.isdir(expanded_model_base_dir):
@@ -375,7 +375,7 @@ def main():
     print(f"Monitoring directory: {os.path.expandvars(MODEL_BASE_DIR)}")
     print(f"Checking for new models every {args.discovery_interval} seconds.")
     print(f"SLURM script: {SLURM_SCRIPT_PATH}")
-    print(f"Benchmarks to run: {', '.join(BENCHMARKS)}")
+    print(f"Benchmarks to run: Determined dynamically (vstibench if name contains 'vstibench', else vsibench)") # Updated print
     print(f"Press Ctrl+C to stop.")
 
     try:
@@ -384,13 +384,18 @@ def main():
             current_discovered_configs = discover_models_and_configs()
             
             new_tasks_for_this_cycle = []
-            if BENCHMARKS and current_discovered_configs: # Only proceed if there are benchmarks and discovered models
-                for benchmark in BENCHMARKS:
-                    for model_checkpoint_name, model_base_path, nodes, time_cfg in current_discovered_configs:
-                        job_identifier = (benchmark, model_checkpoint_name)
-                        if job_identifier not in submitted_job_identifiers:
-                            new_tasks_for_this_cycle.append((benchmark, model_checkpoint_name, model_base_path, nodes, time_cfg))
-                            print(f"  + New task identified for submission: {model_checkpoint_name} (Benchmark: {benchmark}, Nodes: {nodes}, Time: {time_cfg})", flush=True)
+            if current_discovered_configs: # Check if any models were discovered
+                for model_checkpoint_name, model_base_path, nodes, time_cfg in current_discovered_configs:
+                    # Determine benchmark based on model name
+                    if "vstibench" in model_checkpoint_name.lower(): # Case-insensitive check
+                        benchmark = "vstibench"
+                    else:
+                        benchmark = "vsibench"
+
+                    job_identifier = (benchmark, model_checkpoint_name)
+                    if job_identifier not in submitted_job_identifiers:
+                        new_tasks_for_this_cycle.append((benchmark, model_checkpoint_name, model_base_path, nodes, time_cfg))
+                        print(f"  + New task identified for submission: {model_checkpoint_name} (Benchmark: {benchmark}, Nodes: {nodes}, Time: {time_cfg})", flush=True)
             
             if new_tasks_for_this_cycle:
                 print(f"Found {len(new_tasks_for_this_cycle)} new job(s) to process in this cycle.", flush=True)
