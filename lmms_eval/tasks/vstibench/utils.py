@@ -15,6 +15,7 @@ MCA_QUESTION_TYPES = [
     "camera_obj_rel_dist_v1",
     "camera_obj_rel_dist_v2",
     "camera_obj_rel_dist_v3",
+    "camera_movement_direction"
 ]
 NA_QUESTION_TYPES = [
     "camera_obj_abs_dist",

@@ -82,7 +82,7 @@ def discover_models_and_configs():
     base_model_path = "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"
     time_limit = "01:00:00"
     min_month = 5
-    min_day = 12
+    min_day = 14
 
     expanded_model_base_dir = os.path.expandvars(MODEL_BASE_DIR)
     if not os.path.isdir(expanded_model_base_dir):
