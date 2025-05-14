@@ -12,9 +12,14 @@ MCA_QUESTION_TYPES = [
     "obj_obj_relative_pos_nf",
     "obj_obj_relative_pos_ud",
     "obj_obj_relative_pos_lr",
+    "camera_obj_rel_dist_v1",
+    "camera_obj_rel_dist_v2",
+    "camera_obj_rel_dist_v3",
 ]
 NA_QUESTION_TYPES = [
     "camera_obj_abs_dist",
+    "camera_displacement",
+    "camera_obj_dist_change",
 ]
 
 METRICS_FOR_MCA = {
