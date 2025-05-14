@@ -81,8 +81,8 @@ def discover_models_and_configs():
     discovered_configs = []
     base_model_path = "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"
     time_limit = "01:00:00"
-    min_month = 5
-    min_day = 14
+    # min_month = 5 # Removed
+    # min_day = 14 # Removed
 
     expanded_model_base_dir = os.path.expandvars(MODEL_BASE_DIR)
     if not os.path.isdir(expanded_model_base_dir):
@@ -93,7 +93,10 @@ def discover_models_and_configs():
     
     # Regex to capture model name and date part (e.g., llava_video_7b_qwen2_05_09_...)
     # It looks for llava_video_7b_qwen2_ followed by MM_DD (month and day)
-    model_name_pattern = re.compile(r"^(llava_video_7b_qwen2_(\d{2})_(\d{2})_.+)$")
+    model_name_pattern = re.compile(r"^(llava_video_7b_qwen2_(\d{2})_(\d{2})_.+)$") # Regex can be kept or simplified if date part is no longer used for filtering
+    # Simplified regex if date parts are not strictly needed for other logic,
+    # though current one still works for matching the general structure.
+    # model_name_pattern = re.compile(r"^(llava_video_7b_qwen2_.+)$")
     checkpoint_pattern = re.compile(r"^checkpoint-\d+$")
 
     for item in os.listdir(expanded_model_base_dir):
@@ -101,14 +104,14 @@ def discover_models_and_configs():
         if os.path.isdir(item_path):
             match = model_name_pattern.match(item)
             if match:
-                model_prefix_with_date = match.group(1) # full model name part e.g. llava_video_7b_qwen2_05_09_base_lora
-                month = int(match.group(2))
-                day = int(match.group(3))
+                # model_prefix_with_date = match.group(1) # full model name part e.g. llava_video_7b_qwen2_05_09_base_lora
+                # month = int(match.group(2)) # No longer needed for filtering
+                # day = int(match.group(3)) # No longer needed for filtering
 
-                # Check date condition
-                if month < min_month or (month == min_month and day < min_day):
-                    # print(f"Skipping model {item}: date {month:02}_{day:02} is before {min_month:02}_{min_day:02}", flush=True)
-                    continue
+                # Check date condition - REMOVED
+                # if month < min_month or (month == min_month and day < min_day):
+                #     # print(f"Skipping model {item}: date {month:02}_{day:02} is before {min_month:02}_{min_day:02}", flush=True)
+                #     continue
                 
                 # print(f"Found model directory: {item}, checking for checkpoints...", flush=True)
                 
@@ -124,9 +127,11 @@ def discover_models_and_configs():
                         # Removed print from here: print(f"  + Discovered: {model_checkpoint_name}, Nodes: {nodes}, Time: {time_limit}", flush=True)
                         
     if not discovered_configs:
-        print(f"No matching models/checkpoints found in {expanded_model_base_dir} for date >= {min_month:02}_{min_day:02} during this discovery scan.", flush=True)
+        # print(f"No matching models/checkpoints found in {expanded_model_base_dir} for date >= {min_month:02}_{min_day:02} during this discovery scan.", flush=True)
+        print(f"No models/checkpoints matching the pattern found in {expanded_model_base_dir} during this discovery scan.", flush=True)
     else:
-        print(f"--- Finished model discovery scan. Found {len(discovered_configs)} potential configurations. ---", flush=True)
+        # print(f"--- Finished model discovery scan. Found {len(discovered_configs)} potential configurations. ---", flush=True)
+        print(f"--- Finished model discovery scan. Found {len(discovered_configs)} potential configurations matching the naming pattern. ---", flush=True)
     return discovered_configs
 
 
@@ -369,7 +374,8 @@ def main():
 
     os.makedirs(LOG_DIR, exist_ok=True) # Ensure log dir for this script
 
-    submitted_job_identifiers = set() # Stores (benchmark, model_checkpoint_name)
+    processed_model_identifiers = set() # Stores (benchmark, model_checkpoint_name) of models already processed or baselined
+    is_initial_scan = True
 
     print(f"--- Starting continuous SLURM job submitter ---")
     print(f"Monitoring directory: {os.path.expandvars(MODEL_BASE_DIR)}")
@@ -383,7 +389,9 @@ def main():
             print(f"--- [{time.ctime()}] Starting new discovery cycle ---", flush=True)
             current_discovered_configs = discover_models_and_configs()
             
-            new_tasks_for_this_cycle = []
+            new_tasks_for_submission_this_cycle = []
+            newly_identified_for_processing_this_cycle = set() # Temp set for current cycle's new finds or baselined models
+            
             if current_discovered_configs: # Check if any models were discovered
                 for model_checkpoint_name, model_base_path, nodes, time_cfg in current_discovered_configs:
                     # Determine benchmark based on model name
@@ -393,32 +401,62 @@ def main():
                         benchmark = "vsibench"
 
                     job_identifier = (benchmark, model_checkpoint_name)
-                    if job_identifier not in submitted_job_identifiers:
-                        new_tasks_for_this_cycle.append((benchmark, model_checkpoint_name, model_base_path, nodes, time_cfg))
-                        print(f"  + New task identified for submission: {model_checkpoint_name} (Benchmark: {benchmark}, Nodes: {nodes}, Time: {time_cfg})", flush=True)
+                    if job_identifier not in processed_model_identifiers:
+                        # This model hasn't been processed or baselined before
+                        if is_initial_scan:
+                            print(f"  * Baseline model identified: {model_checkpoint_name} (Benchmark: {benchmark}). Will be tracked; not submitted in initial scan.", flush=True)
+                            newly_identified_for_processing_this_cycle.add(job_identifier)
+                        else:
+                            print(f"  + New model detected for submission: {model_checkpoint_name} (Benchmark: {benchmark}, Nodes: {nodes}, Time: {time_cfg})", flush=True)
+                            new_tasks_for_submission_this_cycle.append((benchmark, model_checkpoint_name, model_base_path, nodes, time_cfg))
+                            newly_identified_for_processing_this_cycle.add(job_identifier) # Mark for adding to processed_model_identifiers
             
-            if new_tasks_for_this_cycle:
-                print(f"Found {len(new_tasks_for_this_cycle)} new job(s) to process in this cycle.", flush=True)
+            # Add all newly identified models (either baselined or for submission) to the main tracking set
+            if newly_identified_for_processing_this_cycle:
+                processed_model_identifiers.update(newly_identified_for_processing_this_cycle)
+                if is_initial_scan:
+                    print(f"--- Initial scan complete. {len(newly_identified_for_processing_this_cycle)} model(s) added to baseline. Now monitoring for new models. ---", flush=True)
+                # This case is covered by the new_tasks_for_submission_this_cycle check below for non-initial scans
+                # else:
+                #      print(f"--- {len(newly_identified_for_processing_this_cycle)} new model(s) marked for processing/submission this cycle. ---", flush=True)
+            elif is_initial_scan: # Only if no models were found during the initial scan
+                print(f"--- Initial scan complete. No models found to baseline. Now monitoring for new models. ---", flush=True)
+            
+            is_initial_scan = False # Initial scan is done after the first pass through the discovery and processing logic
+
+            if new_tasks_for_submission_this_cycle:
+                # print(f"Found {len(new_tasks_for_this_cycle)} new job(s) to process in this cycle.", flush=True)
+                print(f"Found {len(new_tasks_for_submission_this_cycle)} new job(s) to process for submission in this cycle.", flush=True)
                 
                 # Add to submitted_job_identifiers *before* attempting submission with the pool.
                 # This marks them as "processed" by this script instance for future cycles.
-                for task_params in new_tasks_for_this_cycle:
-                    benchmark_arg, model_ckpt_name_arg, _, _, _ = task_params
-                    submitted_job_identifiers.add((benchmark_arg, model_ckpt_name_arg))
+                # This is now handled by adding to processed_model_identifiers when they are identified as new_tasks_for_submission_this_cycle
+                # for task_params in new_tasks_for_this_cycle:
+                #     benchmark_arg, model_ckpt_name_arg, _, _, _ = task_params
+                #     submitted_job_identifiers.add((benchmark_arg, model_ckpt_name_arg))
 
                 if args.parallel_jobs > 0:
                     print(f"Submitting new jobs in parallel (up to {args.parallel_jobs} processes)...", flush=True)
                     with multiprocessing.Pool(processes=args.parallel_jobs) as pool:
-                        pool.starmap(submit_slurm_job, new_tasks_for_this_cycle)
-                    print(f"--- Finished processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
-                elif len(new_tasks_for_this_cycle) > 0 : # if parallel_jobs is 0 but there are tasks
+                        # pool.starmap(submit_slurm_job, new_tasks_for_this_cycle)
+                        pool.starmap(submit_slurm_job, new_tasks_for_submission_this_cycle)
+                    # print(f"--- Finished processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
+                    print(f"--- Finished processing {len(new_tasks_for_submission_this_cycle)} new job(s) for submission this cycle. --- ", flush=True)
+                # elif len(new_tasks_for_this_cycle) > 0 : # if parallel_jobs is 0 but there are tasks
+                elif len(new_tasks_for_submission_this_cycle) > 0 : # if parallel_jobs is 0 but there are tasks
                      print("Parallel jobs set to 0 by argument. Sequentially processing new jobs...", flush=True)
-                     for task_args in new_tasks_for_this_cycle:
+                     # for task_args in new_tasks_for_this_cycle:
+                     for task_args in new_tasks_for_submission_this_cycle:
                          submit_slurm_job(*task_args) 
-                     print(f"--- Finished sequentially processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
+                     # print(f"--- Finished sequentially processing {len(new_tasks_for_this_cycle)} new job(s) for this cycle. --- ", flush=True)
+                     print(f"--- Finished sequentially processing {len(new_tasks_for_submission_this_cycle)} new job(s) for submission this cycle. --- ", flush=True)
                 # If parallel_jobs is 0 and no new_tasks, this block is skipped.
             else:
-                print("No new models/checkpoints found requiring submission in this cycle.", flush=True)
+                # print("No new models/checkpoints found requiring submission in this cycle.", flush=True)
+                # Avoid printing this if it was the initial scan and no baseline models were found and no new tasks submitted
+                if not is_initial_scan: # Condition was already set to False above. This means it's a subsequent scan.
+                    # And new_tasks_for_submission_this_cycle is empty
+                    print("No new models/checkpoints found requiring submission in this cycle.", flush=True)
 
             print(f"--- [{time.ctime()}] Discovery cycle complete. Sleeping for {args.discovery_interval} seconds... ---", flush=True)
             time.sleep(args.discovery_interval)
