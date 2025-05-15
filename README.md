@@ -97,6 +97,7 @@ pip install deepspeed
 pip install https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.3/flash_attn-2.7.3+cu12torch2.1cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
 pip install transformers==4.40.0
 pip install peft==0.10.0
+pip install google-generativeai
 ```
 
 ### Evaluation
