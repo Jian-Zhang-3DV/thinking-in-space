@@ -22,29 +22,36 @@ from lmms_eval.api.registry import register_model
 
 eval_logger = logging.getLogger("lmms-eval")
 import sys
-import os # Ensure os is imported
-eval_logger.info(f"Current working directory: {os.getcwd()}")
-sys.path.insert(0, "VILA/") # Use insert(0, ...)
-eval_logger.info(f"sys.path after inserting 'VILA/': {sys.path}")
-eval_logger.info(f"Absolute path for 'VILA/' based on CWD: {os.path.abspath('VILA/')}")
-eval_logger.info(f"Does VILA/llava exist at this path? {os.path.exists(os.path.join(os.path.abspath('VILA/'), 'llava'))}")
+import os
+
+print(f"DEBUG: Current working directory: {os.getcwd()}")
+sys.path.insert(0, "VILA/")
+print(f"DEBUG: sys.path after inserting 'VILA/': {sys.path}")
+print(f"DEBUG: Absolute path for 'VILA/' based on CWD: {os.path.abspath('VILA/')}")
+print(f"DEBUG: Does VILA/llava exist at this path? {os.path.exists(os.path.join(os.path.abspath('VILA/'), 'llava'))}")
 
 try:
+    print("DEBUG: Attempting to import from llava...")
     from llava.constants import (
         DEFAULT_IM_END_TOKEN,
         DEFAULT_IM_START_TOKEN,
         DEFAULT_IMAGE_TOKEN,
         IMAGE_TOKEN_INDEX,
     )
+    print("DEBUG: Imported llava.constants")
     from llava.conversation import SeparatorStyle, conv_templates
+    print("DEBUG: Imported llava.conversation")
     from llava.mm_utils import (
         KeywordsStoppingCriteria,
         get_model_name_from_path,
         process_images,
         tokenizer_image_token,
     )
+    print("DEBUG: Imported llava.mm_utils")
     from llava.model.builder import load_pretrained_model
+    print("DEBUG: Imported llava.model.builder")
 except ImportError as e:
+    print(f"DEBUG: ImportError occurred: {e}")
     eval_logger.debug(f"VILA is not installed. Please install VILA to use this model. Error: {e}")
 
 
