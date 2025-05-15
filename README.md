@@ -105,7 +105,7 @@ pip iinstall omegaconf
 We provide a all-in-one evaluation scripts. You can simply run the following code to start your evaluation.
 
 ```bash
-bash evaluate_all_in_one.sh --model all --num_processes 8 --benchmark vsibench
+bash evaluate_all_in_one.sh --model all --num_processes 8 --benchmark vstibench
 ```
 
 > Note: The evaluation results for open-source models may differ slightly from our tables due to additional data refinement. We will update the tables and our paper soon.
