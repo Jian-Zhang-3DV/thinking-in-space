@@ -3,7 +3,7 @@ dataset_kwargs:
   token: True
   cache_dir: vstibench
   video: True
-  force_download: True
+  # force_download: True
 task: vstibench
 test_split: test
 output_type: generate_until
