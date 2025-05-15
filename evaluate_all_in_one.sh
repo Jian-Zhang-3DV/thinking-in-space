@@ -12,13 +12,13 @@ fi
 export OPENAI_API_KEY="" # API KEY FOR OPENAI CHATGPT
 export GOOGLE_API_KEY="" # API KEY FOR GOGOLE GEMINI
 
-benchmark=vsibench
+benchmark=vstibench
 output_path=logs/$(TZ="America/New_York" date "+%Y%m%d")
-num_processes=4
+num_processes=8
 num_frames=32
 launcher=accelerate
 
-available_models="llava_one_vision_qwen2_0p5b_ov_32f,llava_one_vision_qwen2_7b_ov_32f,llava_next_video_7b_qwen2_32f,llama3_vila1p5_8b_32f,llama3_longvila_8b_128frames_32f,longva_7b_32f,internvl2_2b_8f,internvl2_8b_8f"
+available_models="llama3_vila1p5_40b_32f"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
