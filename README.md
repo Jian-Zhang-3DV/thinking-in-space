@@ -87,8 +87,8 @@ cd thinking-in-space
 
 git submodule update --init --recursive
 
-conda create --name vsibench python=3.10
-conda activate vsibench
+conda create --name vstibench python=3.10
+conda activate vstibench
 conda install pytorch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 
 pip install -e .
@@ -97,6 +97,7 @@ pip install deepspeed
 pip install https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.3/flash_attn-2.7.3+cu12torch2.1cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
 pip install transformers==4.40.0
 pip install peft==0.10.0
+pip iinstall omegaconf
 ```
 
 ### Evaluation
