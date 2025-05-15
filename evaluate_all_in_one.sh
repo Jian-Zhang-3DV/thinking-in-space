@@ -106,7 +106,7 @@ for model in "${models[@]}"; do
     "llama3_vila1p5_40b_32f")
         model_family="vila"
         model_args="pretrained=Efficient-Large-Model/VILA1.5-40b,attn_implementation=flash_attention_2,video_decode_backend=decord,conv_template=hermes-2,max_frames_num=32,device_map=auto"
-        num_processes=2
+        num_processes=1
         ;;
     "llama3_longvila_8b_128frames_32f")
         model_family="vila"
