@@ -21,7 +21,14 @@ from lmms_eval.api.model import lmms
 from lmms_eval.api.registry import register_model
 
 eval_logger = logging.getLogger("lmms-eval")
-import sys; sys.path = ["VILA/"] + sys.path
+import sys
+import os # Ensure os is imported
+eval_logger.info(f"Current working directory: {os.getcwd()}")
+sys.path.insert(0, "VILA/") # Use insert(0, ...)
+eval_logger.info(f"sys.path after inserting 'VILA/': {sys.path}")
+eval_logger.info(f"Absolute path for 'VILA/' based on CWD: {os.path.abspath('VILA/')}")
+eval_logger.info(f"Does VILA/llava exist at this path? {os.path.exists(os.path.join(os.path.abspath('VILA/'), 'llava'))}")
+
 try:
     from llava.constants import (
         DEFAULT_IM_END_TOKEN,
