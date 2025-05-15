@@ -18,7 +18,7 @@ num_processes=8
 num_frames=32
 launcher=accelerate
 
-available_models="llama3_vila1p5_40b_32f"
+available_models="llava_next_video_72b_qwen2_32f,llava_one_vision_qwen2_72b_ov_32f"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
