@@ -71,6 +71,8 @@ def vsibench_doc_to_text(doc, lmms_eval_specific_kwargs=None):
 
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
+    # 过滤出route_planning类型的数据
+    dataset = dataset.filter(lambda x: x['question_type'] == 'route_planning')
     
     if os.getenv('LMMS_EVAL_SHUFFLE_DOCS', None):
         eval_logger.info(f"Environment variable LMMS_EVAL_SHUFFLE_DOCS detected, dataset will be shuffled.")
