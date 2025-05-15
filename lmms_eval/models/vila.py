@@ -56,7 +56,7 @@ def prepare_config_for_eval(config, kwargs):
     # if "siglip" in vision_tower_name.lower():
     #     kwargs["device_map"] = "cuda"
 
-import llava
+import llava.model.builder
 llava.model.builder.prepare_config_for_eval = prepare_config_for_eval
 
 
