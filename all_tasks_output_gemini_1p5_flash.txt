@@ -1,0 +1,1629 @@
+Evaluating task: vstibench
+Start evaluating gemini_1p5_flash...
+accelerate launch --num_processes=1 -m lmms_eval --model gemini_api --model_args model_version=gemini-1.5-flash,modality=video --tasks vstibench --batch_size 1 --log_samples --log_samples_suffix gemini_1p5_flash --output_path logs/20250514/vstibench
+This script was launched with accelerate
+[32m2025-05-14 17:42:39.426[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m308[0m - [1mVerbosity set to INFO[0m
+[32m2025-05-14 17:42:39.450[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m393[0m - [1mEvaluation tracker args: {'output_path': 'logs/20250514/vstibench'}[0m
+[32m2025-05-14 17:42:39.460[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m484[0m - [1mSelected Tasks: ['vstibench'][0m
+[32m2025-05-14 17:42:39.461[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m152[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-05-14 17:43:04.882[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vstibench, using default n_shot=0[0m
+[32m2025-05-14 17:43:04.892[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m389[0m - [1mBuilding contexts for task vstibench on rank 0...[0m
+[32m2025-05-14 17:43:05.712[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m439[0m - [1mRunning generate_until requests[0m
+prompt_token_count: 17753
+candidates_token_count: 1
+total_token_count: 17754
+
+prompt_token_count: 14634
+candidates_token_count: 1
+total_token_count: 14635
+
+prompt_token_count: 15154
+candidates_token_count: 1
+total_token_count: 15155
+
+prompt_token_count: 14372
+candidates_token_count: 1
+total_token_count: 14373
+
+prompt_token_count: 14373
+candidates_token_count: 1
+total_token_count: 14374
+
+prompt_token_count: 14373
+candidates_token_count: 1
+total_token_count: 14374
+
+prompt_token_count: 13333
+candidates_token_count: 1
+total_token_count: 13334
+
+prompt_token_count: 13333
+candidates_token_count: 1
+total_token_count: 13334
+
+prompt_token_count: 13333
+candidates_token_count: 1
+total_token_count: 13334
+
+prompt_token_count: 13335
+candidates_token_count: 2
+total_token_count: 13337
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 33094
+candidates_token_count: 2
+total_token_count: 33096
+
+[32m2025-05-14 17:45:01.887[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File k6xalw3d6dco is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 33093
+candidates_token_count: 1
+total_token_count: 33094
+
+prompt_token_count: 33093
+candidates_token_count: 1
+total_token_count: 33094
+
+prompt_token_count: 33095
+candidates_token_count: 1
+total_token_count: 33096
+
+prompt_token_count: 33095
+candidates_token_count: 1
+total_token_count: 33096
+
+[32m2025-05-14 17:46:04.448[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 3q8g2egxq6u6 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 32574
+candidates_token_count: 2
+total_token_count: 32576
+
+prompt_token_count: 32573
+candidates_token_count: 1
+total_token_count: 32574
+
+prompt_token_count: 32575
+candidates_token_count: 1
+total_token_count: 32576
+
+prompt_token_count: 32573
+candidates_token_count: 1
+total_token_count: 32574
+
+prompt_token_count: 32575
+candidates_token_count: 1
+total_token_count: 32576
+
+prompt_token_count: 24772
+candidates_token_count: 1
+total_token_count: 24773
+
+prompt_token_count: 16193
+candidates_token_count: 1
+total_token_count: 16194
+
+prompt_token_count: 16193
+candidates_token_count: 1
+total_token_count: 16194
+
+prompt_token_count: 16193
+candidates_token_count: 2
+total_token_count: 16195
+
+prompt_token_count: 16193
+candidates_token_count: 1
+total_token_count: 16194
+
+prompt_token_count: 15933
+candidates_token_count: 1
+total_token_count: 15934
+
+prompt_token_count: 15933
+candidates_token_count: 1
+total_token_count: 15934
+
+prompt_token_count: 13072
+candidates_token_count: 1
+total_token_count: 13073
+
+prompt_token_count: 13074
+candidates_token_count: 1
+total_token_count: 13075
+
+prompt_token_count: 13074
+candidates_token_count: 1
+total_token_count: 13075
+
+prompt_token_count: 13075
+candidates_token_count: 1
+total_token_count: 13076
+
+prompt_token_count: 13075
+candidates_token_count: 1
+total_token_count: 13076
+
+prompt_token_count: 13075
+candidates_token_count: 1
+total_token_count: 13076
+
+prompt_token_count: 12552
+candidates_token_count: 1
+total_token_count: 12553
+
+prompt_token_count: 12552
+candidates_token_count: 1
+total_token_count: 12553
+
+prompt_token_count: 12555
+candidates_token_count: 1
+total_token_count: 12556
+
+prompt_token_count: 12555
+candidates_token_count: 1
+total_token_count: 12556
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+prompt_token_count: 12553
+candidates_token_count: 1
+total_token_count: 12554
+
+[32m2025-05-14 17:50:46.476[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File jht59rrcoyyi is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 50253
+candidates_token_count: 1
+total_token_count: 50254
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+[32m2025-05-14 17:51:25.428[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 20ul7d0sw7f2 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 47393
+candidates_token_count: 1
+total_token_count: 47394
+
+prompt_token_count: 21133
+candidates_token_count: 1
+total_token_count: 21134
+
+prompt_token_count: 21133
+candidates_token_count: 1
+total_token_count: 21134
+
+prompt_token_count: 21133
+candidates_token_count: 1
+total_token_count: 21134
+
+prompt_token_count: 21133
+candidates_token_count: 1
+total_token_count: 21134
+
+prompt_token_count: 21133
+candidates_token_count: 1
+total_token_count: 21134
+
+prompt_token_count: 19312
+candidates_token_count: 1
+total_token_count: 19313
+
+prompt_token_count: 19312
+candidates_token_count: 1
+total_token_count: 19313
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 19313
+candidates_token_count: 1
+total_token_count: 19314
+
+prompt_token_count: 16193
+candidates_token_count: 1
+total_token_count: 16194
+
+[32m2025-05-14 17:53:57.405[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File pyri8djskyxd is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51552
+candidates_token_count: 2
+total_token_count: 51554
+
+[32m2025-05-14 17:54:27.852[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 44eippqwqpae is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51554
+candidates_token_count: 1
+total_token_count: 51555
+
+[32m2025-05-14 17:54:52.864[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File w4qqtxpapijf is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51553
+candidates_token_count: 1
+total_token_count: 51554
+
+prompt_token_count: 41412
+candidates_token_count: 1
+total_token_count: 41413
+
+prompt_token_count: 41413
+candidates_token_count: 1
+total_token_count: 41414
+
+prompt_token_count: 41413
+candidates_token_count: 1
+total_token_count: 41414
+
+prompt_token_count: 11514
+candidates_token_count: 1
+total_token_count: 11515
+
+prompt_token_count: 11514
+candidates_token_count: 1
+total_token_count: 11515
+
+prompt_token_count: 11512
+candidates_token_count: 1
+total_token_count: 11513
+
+prompt_token_count: 11512
+candidates_token_count: 1
+total_token_count: 11513
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11513
+candidates_token_count: 1
+total_token_count: 11514
+
+prompt_token_count: 11515
+candidates_token_count: 1
+total_token_count: 11516
+
+prompt_token_count: 21915
+candidates_token_count: 1
+total_token_count: 21916
+
+prompt_token_count: 21915
+candidates_token_count: 1
+total_token_count: 21916
+
+prompt_token_count: 21915
+candidates_token_count: 1
+total_token_count: 21916
+
+prompt_token_count: 16974
+candidates_token_count: 1
+total_token_count: 16975
+
+prompt_token_count: 16972
+candidates_token_count: 1
+total_token_count: 16973
+
+prompt_token_count: 10473
+candidates_token_count: 1
+total_token_count: 10474
+
+prompt_token_count: 10475
+candidates_token_count: 1
+total_token_count: 10476
+
+prompt_token_count: 10473
+candidates_token_count: 1
+total_token_count: 10474
+
+prompt_token_count: 10473
+candidates_token_count: 1
+total_token_count: 10474
+
+prompt_token_count: 10473
+candidates_token_count: 1
+total_token_count: 10474
+
+prompt_token_count: 8393
+candidates_token_count: 1
+total_token_count: 8394
+
+prompt_token_count: 8393
+candidates_token_count: 1
+total_token_count: 8394
+
+prompt_token_count: 8393
+candidates_token_count: 1
+total_token_count: 8394
+
+prompt_token_count: 8395
+candidates_token_count: 1
+total_token_count: 8396
+
+prompt_token_count: 8395
+candidates_token_count: 1
+total_token_count: 8396
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18532
+candidates_token_count: 1
+total_token_count: 18533
+
+prompt_token_count: 18535
+candidates_token_count: 1
+total_token_count: 18536
+
+prompt_token_count: 18533
+candidates_token_count: 1
+total_token_count: 18534
+
+prompt_token_count: 18537
+candidates_token_count: 1
+total_token_count: 18538
+
+prompt_token_count: 18535
+candidates_token_count: 1
+total_token_count: 18536
+
+prompt_token_count: 18535
+candidates_token_count: 1
+total_token_count: 18536
+
+prompt_token_count: 18533
+candidates_token_count: 1
+total_token_count: 18534
+
+prompt_token_count: 18533
+candidates_token_count: 1
+total_token_count: 18534
+
+prompt_token_count: 18533
+candidates_token_count: 1
+total_token_count: 18534
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25295
+candidates_token_count: 1
+total_token_count: 25296
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 25293
+candidates_token_count: 1
+total_token_count: 25294
+
+prompt_token_count: 26594
+candidates_token_count: 1
+total_token_count: 26595
+
+prompt_token_count: 26594
+candidates_token_count: 1
+total_token_count: 26595
+
+prompt_token_count: 26594
+candidates_token_count: 1
+total_token_count: 26595
+
+prompt_token_count: 26595
+candidates_token_count: 1
+total_token_count: 26596
+
+prompt_token_count: 25034
+candidates_token_count: 1
+total_token_count: 25035
+
+prompt_token_count: 25034
+candidates_token_count: 1
+total_token_count: 25035
+
+prompt_token_count: 25033
+candidates_token_count: 1
+total_token_count: 25034
+
+prompt_token_count: 25035
+candidates_token_count: 1
+total_token_count: 25036
+
+prompt_token_count: 25033
+candidates_token_count: 1
+total_token_count: 25034
+
+prompt_token_count: 25033
+candidates_token_count: 1
+total_token_count: 25034
+
+prompt_token_count: 24772
+candidates_token_count: 1
+total_token_count: 24773
+
+prompt_token_count: 24774
+candidates_token_count: 1
+total_token_count: 24775
+
+prompt_token_count: 24774
+candidates_token_count: 1
+total_token_count: 24775
+
+prompt_token_count: 24775
+candidates_token_count: 1
+total_token_count: 24776
+
+prompt_token_count: 24773
+candidates_token_count: 1
+total_token_count: 24774
+
+prompt_token_count: 24773
+candidates_token_count: 1
+total_token_count: 24774
+
+prompt_token_count: 5792
+candidates_token_count: 1
+total_token_count: 5793
+
+prompt_token_count: 5792
+candidates_token_count: 2
+total_token_count: 5794
+
+prompt_token_count: 5792
+candidates_token_count: 1
+total_token_count: 5793
+
+prompt_token_count: 5793
+candidates_token_count: 1
+total_token_count: 5794
+
+prompt_token_count: 5793
+candidates_token_count: 1
+total_token_count: 5794
+
+prompt_token_count: 10733
+candidates_token_count: 1
+total_token_count: 10734
+
+prompt_token_count: 10733
+candidates_token_count: 1
+total_token_count: 10734
+
+prompt_token_count: 10733
+candidates_token_count: 1
+total_token_count: 10734
+
+prompt_token_count: 10735
+candidates_token_count: 2
+total_token_count: 10737
+
+prompt_token_count: 10733
+candidates_token_count: 1
+total_token_count: 10734
+
+prompt_token_count: 10733
+candidates_token_count: 1
+total_token_count: 10734
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9175
+candidates_token_count: 2
+total_token_count: 9177
+
+prompt_token_count: 20352
+candidates_token_count: 2
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20355
+candidates_token_count: 1
+total_token_count: 20356
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 20353
+candidates_token_count: 2
+total_token_count: 20355
+
+prompt_token_count: 24254
+candidates_token_count: 2
+total_token_count: 24256
+
+prompt_token_count: 24254
+candidates_token_count: 1
+total_token_count: 24255
+
+prompt_token_count: 24252
+candidates_token_count: 1
+total_token_count: 24253
+
+prompt_token_count: 24252
+candidates_token_count: 2
+total_token_count: 24254
+
+prompt_token_count: 24253
+candidates_token_count: 2
+total_token_count: 24255
+
+prompt_token_count: 24253
+candidates_token_count: 1
+total_token_count: 24254
+
+prompt_token_count: 24253
+candidates_token_count: 1
+total_token_count: 24254
+
+prompt_token_count: 24253
+candidates_token_count: 2
+total_token_count: 24255
+
+prompt_token_count: 24253
+candidates_token_count: 2
+total_token_count: 24255
+
+prompt_token_count: 24253
+candidates_token_count: 2
+total_token_count: 24255
+
+prompt_token_count: 24253
+candidates_token_count: 1
+total_token_count: 24254
+
+prompt_token_count: 24253
+candidates_token_count: 1
+total_token_count: 24254
+
+prompt_token_count: 26854
+candidates_token_count: 1
+total_token_count: 26855
+
+prompt_token_count: 26852
+candidates_token_count: 1
+total_token_count: 26853
+
+prompt_token_count: 26855
+candidates_token_count: 1
+total_token_count: 26856
+
+prompt_token_count: 26853
+candidates_token_count: 1
+total_token_count: 26854
+
+prompt_token_count: 26855
+candidates_token_count: 1
+total_token_count: 26856
+
+prompt_token_count: 15153
+candidates_token_count: 1
+total_token_count: 15154
+
+prompt_token_count: 15152
+candidates_token_count: 1
+total_token_count: 15153
+
+prompt_token_count: 15152
+candidates_token_count: 1
+total_token_count: 15153
+
+prompt_token_count: 18794
+candidates_token_count: 2
+total_token_count: 18796
+
+prompt_token_count: 18794
+candidates_token_count: 1
+total_token_count: 18795
+
+prompt_token_count: 18792
+candidates_token_count: 1
+total_token_count: 18793
+
+prompt_token_count: 18795
+candidates_token_count: 1
+total_token_count: 18796
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18794
+candidates_token_count: 1
+total_token_count: 18795
+
+prompt_token_count: 18792
+candidates_token_count: 1
+total_token_count: 18793
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18793
+candidates_token_count: 1
+total_token_count: 18794
+
+prompt_token_count: 18793
+candidates_token_count: 2
+total_token_count: 18795
+
+prompt_token_count: 18793
+candidates_token_count: 2
+total_token_count: 18795
+
+prompt_token_count: 12034
+candidates_token_count: 1
+total_token_count: 12035
+
+prompt_token_count: 12035
+candidates_token_count: 1
+total_token_count: 12036
+
+prompt_token_count: 12035
+candidates_token_count: 1
+total_token_count: 12036
+
+[32m2025-05-14 18:14:24.015[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File wpygy79vpy45 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 35434
+candidates_token_count: 1
+total_token_count: 35435
+
+prompt_token_count: 22694
+candidates_token_count: 1
+total_token_count: 22695
+
+prompt_token_count: 26852
+candidates_token_count: 1
+total_token_count: 26853
+
+prompt_token_count: 26852
+candidates_token_count: 2
+total_token_count: 26854
+
+prompt_token_count: 26852
+candidates_token_count: 2
+total_token_count: 26854
+
+prompt_token_count: 26852
+candidates_token_count: 1
+total_token_count: 26853
+
+prompt_token_count: 26852
+candidates_token_count: 1
+total_token_count: 26853
+
+prompt_token_count: 26852
+candidates_token_count: 1
+total_token_count: 26853
+
+prompt_token_count: 26853
+candidates_token_count: 1
+total_token_count: 26854
+
+prompt_token_count: 30752
+candidates_token_count: 2
+total_token_count: 30754
+
+[32m2025-05-14 18:16:17.064[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File mbviu5p6byrn is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 30752
+candidates_token_count: 1
+total_token_count: 30753
+
+prompt_token_count: 30752
+candidates_token_count: 1
+total_token_count: 30753
+
+prompt_token_count: 30752
+candidates_token_count: 1
+total_token_count: 30753
+
+prompt_token_count: 30753
+candidates_token_count: 1
+total_token_count: 30754
+
+prompt_token_count: 30753
+candidates_token_count: 1
+total_token_count: 30754
+
+prompt_token_count: 30754
+candidates_token_count: 1
+total_token_count: 30755
+
+prompt_token_count: 30753
+candidates_token_count: 1
+total_token_count: 30754
+
+prompt_token_count: 27372
+candidates_token_count: 1
+total_token_count: 27373
+
+prompt_token_count: 27372
+candidates_token_count: 2
+total_token_count: 27374
+
+[32m2025-05-14 18:17:48.542[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 62g6supclgma is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 27372
+candidates_token_count: 1
+total_token_count: 27373
+
+prompt_token_count: 27372
+candidates_token_count: 1
+total_token_count: 27373
+
+prompt_token_count: 27372
+candidates_token_count: 1
+total_token_count: 27373
+
+prompt_token_count: 27373
+candidates_token_count: 1
+total_token_count: 27374
+
+prompt_token_count: 27373
+candidates_token_count: 1
+total_token_count: 27374
+
+prompt_token_count: 27373
+candidates_token_count: 1
+total_token_count: 27374
+
+prompt_token_count: 27374
+candidates_token_count: 1
+total_token_count: 27375
+
+prompt_token_count: 27373
+candidates_token_count: 1
+total_token_count: 27374
+
+prompt_token_count: 36732
+candidates_token_count: 2
+total_token_count: 36734
+
+[32m2025-05-14 18:19:24.923[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File ih7w3ij4s03n is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 36732
+candidates_token_count: 1
+total_token_count: 36733
+
+[32m2025-05-14 18:19:48.266[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File yoaojmjxwoqx is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 36733
+candidates_token_count: 1
+total_token_count: 36734
+
+prompt_token_count: 31012
+candidates_token_count: 2
+total_token_count: 31014
+
+[32m2025-05-14 18:20:23.187[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File g39f88ub8j7a is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 31013
+candidates_token_count: 1
+total_token_count: 31014
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 9435
+candidates_token_count: 1
+total_token_count: 9436
+
+prompt_token_count: 9435
+candidates_token_count: 1
+total_token_count: 9436
+
+prompt_token_count: 12035
+candidates_token_count: 1
+total_token_count: 12036
+
+prompt_token_count: 14635
+candidates_token_count: 1
+total_token_count: 14636
+
+prompt_token_count: 14635
+candidates_token_count: 1
+total_token_count: 14636
+
+prompt_token_count: 14633
+candidates_token_count: 1
+total_token_count: 14634
+
+prompt_token_count: 14633
+candidates_token_count: 1
+total_token_count: 14634
+
+prompt_token_count: 32833
+candidates_token_count: 1
+total_token_count: 32834
+
+prompt_token_count: 35953
+candidates_token_count: 1
+total_token_count: 35954
+
+prompt_token_count: 35952
+candidates_token_count: 1
+total_token_count: 35953
+
+prompt_token_count: 8392
+candidates_token_count: 1
+total_token_count: 8393
+
+prompt_token_count: 8392
+candidates_token_count: 1
+total_token_count: 8393
+
+prompt_token_count: 8393
+candidates_token_count: 1
+total_token_count: 8394
+
+prompt_token_count: 6832
+candidates_token_count: 1
+total_token_count: 6833
+
+prompt_token_count: 6832
+candidates_token_count: 1
+total_token_count: 6833
+
+prompt_token_count: 6832
+candidates_token_count: 1
+total_token_count: 6833
+
+prompt_token_count: 6832
+candidates_token_count: 1
+total_token_count: 6833
+
+prompt_token_count: 6833
+candidates_token_count: 1
+total_token_count: 6834
+
+prompt_token_count: 8652
+candidates_token_count: 1
+total_token_count: 8653
+
+prompt_token_count: 15155
+candidates_token_count: 2
+total_token_count: 15157
+
+prompt_token_count: 15155
+candidates_token_count: 1
+total_token_count: 15156
+
+prompt_token_count: 19573
+candidates_token_count: 1
+total_token_count: 19574
+
+prompt_token_count: 19573
+candidates_token_count: 1
+total_token_count: 19574
+
+prompt_token_count: 22953
+candidates_token_count: 2
+total_token_count: 22955
+
+prompt_token_count: 22953
+candidates_token_count: 1
+total_token_count: 22954
+
+prompt_token_count: 22692
+candidates_token_count: 1
+total_token_count: 22693
+
+prompt_token_count: 22693
+candidates_token_count: 1
+total_token_count: 22694
+
+prompt_token_count: 22695
+candidates_token_count: 1
+total_token_count: 22696
+
+prompt_token_count: 31274
+candidates_token_count: 1
+total_token_count: 31275
+
+prompt_token_count: 31274
+candidates_token_count: 1
+total_token_count: 31275
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 15155
+candidates_token_count: 1
+total_token_count: 15156
+
+prompt_token_count: 28933
+candidates_token_count: 1
+total_token_count: 28934
+
+prompt_token_count: 17232
+candidates_token_count: 1
+total_token_count: 17233
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15415
+candidates_token_count: 1
+total_token_count: 15416
+
+prompt_token_count: 15413
+candidates_token_count: 1
+total_token_count: 15414
+
+prompt_token_count: 15415
+candidates_token_count: 1
+total_token_count: 15416
+
+prompt_token_count: 7875
+candidates_token_count: 1
+total_token_count: 7876
+
+prompt_token_count: 21395
+candidates_token_count: 1
+total_token_count: 21396
+
+prompt_token_count: 20613
+candidates_token_count: 1
+total_token_count: 20614
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15672
+candidates_token_count: 1
+total_token_count: 15673
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 15673
+candidates_token_count: 1
+total_token_count: 15674
+
+prompt_token_count: 9172
+candidates_token_count: 1
+total_token_count: 9173
+
+prompt_token_count: 9172
+candidates_token_count: 1
+total_token_count: 9173
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9175
+candidates_token_count: 1
+total_token_count: 9176
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 9174
+candidates_token_count: 1
+total_token_count: 9175
+
+prompt_token_count: 9173
+candidates_token_count: 1
+total_token_count: 9174
+
+prompt_token_count: 21652
+candidates_token_count: 1
+total_token_count: 21653
+
+prompt_token_count: 21652
+candidates_token_count: 1
+total_token_count: 21653
+
+prompt_token_count: 21652
+candidates_token_count: 1
+total_token_count: 21653
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+prompt_token_count: 21653
+candidates_token_count: 2
+total_token_count: 21655
+
+prompt_token_count: 21654
+candidates_token_count: 2
+total_token_count: 21656
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+prompt_token_count: 21653
+candidates_token_count: 1
+total_token_count: 21654
+
+prompt_token_count: 48694
+candidates_token_count: 1
+total_token_count: 48695
+
+prompt_token_count: 48694
+candidates_token_count: 1
+total_token_count: 48695
+
+prompt_token_count: 48693
+candidates_token_count: 1
+total_token_count: 48694
+
+[32m2025-05-14 18:35:20.785[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File vhy7l32vwjbd is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 48693
+candidates_token_count: 2
+total_token_count: 48695
+
+prompt_token_count: 48693
+candidates_token_count: 2
+total_token_count: 48695
+
+prompt_token_count: 56492
+candidates_token_count: 2
+total_token_count: 56494
+
+prompt_token_count: 56493
+candidates_token_count: 1
+total_token_count: 56494
+
+[32m2025-05-14 18:36:31.492[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File j8958954v6jx is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 56493
+candidates_token_count: 1
+total_token_count: 56494
+
+[32m2025-05-14 18:36:57.468[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File tuon6fcbld4x is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 56493
+candidates_token_count: 1
+total_token_count: 56494
+
+[32m2025-05-14 18:37:24.529[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File qtu4ide8uhv9 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 56493
+candidates_token_count: 1
+total_token_count: 56494
+
+[32m2025-05-14 18:37:48.817[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File gtcxjp32lwg8 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 31272
+candidates_token_count: 1
+total_token_count: 31273
+
+prompt_token_count: 31272
+candidates_token_count: 1
+total_token_count: 31273
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 31273
+candidates_token_count: 1
+total_token_count: 31274
+
+prompt_token_count: 11773
+candidates_token_count: 1
+total_token_count: 11774
+
+prompt_token_count: 32312
+candidates_token_count: 1
+total_token_count: 32313
+
+prompt_token_count: 32313
+candidates_token_count: 1
+total_token_count: 32314
+
+prompt_token_count: 25292
+candidates_token_count: 1
+total_token_count: 25293
+
+prompt_token_count: 24775
+candidates_token_count: 1
+total_token_count: 24776
+
+prompt_token_count: 13073
+candidates_token_count: 1
+total_token_count: 13074
+
+prompt_token_count: 13075
+candidates_token_count: 1
+total_token_count: 13076
+
+[32m2025-05-14 18:40:05.495[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 7vt0l16phk20 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 41933
+candidates_token_count: 1
+total_token_count: 41934
+
+[32m2025-05-14 18:40:32.800[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File zlnrml9262ry is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 41933
+candidates_token_count: 1
+total_token_count: 41934
+
+prompt_token_count: 41933
+candidates_token_count: 1
+total_token_count: 41934
+
+prompt_token_count: 41933
+candidates_token_count: 1
+total_token_count: 41934
+
+[32m2025-05-14 18:41:27.771[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File n8iviy8xqccs is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 41933
+candidates_token_count: 1
+total_token_count: 41934
+
+prompt_token_count: 51813
+candidates_token_count: 1
+total_token_count: 51814
+
+[32m2025-05-14 18:42:09.362[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File mp348xx0bfbv is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51813
+candidates_token_count: 1
+total_token_count: 51814
+
+[32m2025-05-14 18:42:33.666[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File m9k2yqjqi8h5 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51813
+candidates_token_count: 1
+total_token_count: 51814
+
+prompt_token_count: 51813
+candidates_token_count: 1
+total_token_count: 51814
+
+[32m2025-05-14 18:43:11.816[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File zqdmsfl11m6q is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 51813
+candidates_token_count: 1
+total_token_count: 51814
+
+[32m2025-05-14 18:43:36.972[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 7z0t0fgw03aq is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 58573
+candidates_token_count: 2
+total_token_count: 58575
+
+[32m2025-05-14 18:44:07.019[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 7lh8ujxvz7wf is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 58574
+candidates_token_count: 1
+total_token_count: 58575
+
+[32m2025-05-14 18:44:31.574[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File g72yiwf7hjqm is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 58574
+candidates_token_count: 2
+total_token_count: 58576
+
+prompt_token_count: 58574
+candidates_token_count: 1
+total_token_count: 58575
+
+[32m2025-05-14 18:45:12.912[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File u0imn3dujf2s is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 58573
+candidates_token_count: 1
+total_token_count: 58574
+
+prompt_token_count: 58573
+candidates_token_count: 1
+total_token_count: 58574
+
+[32m2025-05-14 18:45:52.431[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File yqp5t97q8ovm is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 58573
+candidates_token_count: 1
+total_token_count: 58574
+
+prompt_token_count: 45312
+candidates_token_count: 2
+total_token_count: 45314
+
+[32m2025-05-14 18:46:33.717[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File zx7p3w44rywo is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 45313
+candidates_token_count: 1
+total_token_count: 45314
+
+prompt_token_count: 45314
+candidates_token_count: 1
+total_token_count: 45315
+
+[32m2025-05-14 18:47:11.511[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File q0i4o1zr04xv is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 45313
+candidates_token_count: 1
+total_token_count: 45314
+
+prompt_token_count: 20354
+candidates_token_count: 1
+total_token_count: 20355
+
+prompt_token_count: 20354
+candidates_token_count: 1
+total_token_count: 20355
+
+prompt_token_count: 20354
+candidates_token_count: 1
+total_token_count: 20355
+
+prompt_token_count: 20354
+candidates_token_count: 1
+total_token_count: 20355
+
+prompt_token_count: 20354
+candidates_token_count: 1
+total_token_count: 20355
+
+prompt_token_count: 20353
+candidates_token_count: 1
+total_token_count: 20354
+
+prompt_token_count: 21394
+candidates_token_count: 1
+total_token_count: 21395
+
+prompt_token_count: 21392
+candidates_token_count: 1
+total_token_count: 21393
+
+prompt_token_count: 21393
+candidates_token_count: 1
+total_token_count: 21394
+
+prompt_token_count: 31792
+candidates_token_count: 2
+total_token_count: 31794
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 31792
+candidates_token_count: 2
+total_token_count: 31794
+
+prompt_token_count: 31792
+candidates_token_count: 1
+total_token_count: 31793
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 31793
+candidates_token_count: 1
+total_token_count: 31794
+
+prompt_token_count: 31795
+candidates_token_count: 1
+total_token_count: 31796
+
+prompt_token_count: 31793
+candidates_token_count: 2
+total_token_count: 31795
+
+[32m2025-05-14 18:50:29.305[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File r8lk93ruhoq5 is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 38814
+candidates_token_count: 1
+total_token_count: 38815
+
+prompt_token_count: 38812
+candidates_token_count: 1
+total_token_count: 38813
+
+prompt_token_count: 38815
+candidates_token_count: 1
+total_token_count: 38816
+
+[32m2025-05-14 18:51:25.539[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File 2q5ly1cybbrn is not in an ACTIVE state and usage is not allowed.[0m
+prompt_token_count: 38815
+candidates_token_count: 1
+total_token_count: 38816
+
+prompt_token_count: 38815
+candidates_token_count: 1
+total_token_count: 38816
+
+prompt_token_count: 38815
+candidates_token_count: 1
+total_token_count: 38816
+
+prompt_token_count: 32054
+candidates_token_count: 1
+total_token_count: 32055
+
+prompt_token_count: 32052
+candidates_token_count: 1
+total_token_count: 32053
+
+prompt_token_count: 32054
+candidates_token_count: 1
+total_token_count: 32055
+
+prompt_token_count: 32052
+candidates_token_count: 1
+total_token_count: 32053
+
+[32m2025-05-14 18:53:26.573[0m | [1mINFO    [0m | [36mlmms_eval.models.gemini_api[0m:[36mgenerate_until[0m:[36m165[0m - [1mAttempt 1 failed with error: 400 The File h2ycrat8mn8i is not in an ACTIVE state and usage is not allowed.[0m

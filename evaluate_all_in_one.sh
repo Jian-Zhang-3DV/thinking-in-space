@@ -69,6 +69,14 @@ for model in "${models[@]}"; do
         model_family="gemini_api"
         model_args="model_version=gemini-2.0-flash-exp,modality=video"
         ;;
+    "gemini-2.5-pro-preview-05-06")
+        model_family="gemini_api"
+        model_args="model_version=gemini-2.5-pro-preview-05-06,modality=video"
+        ;;
+    "gemini-2.5-flash-preview-04-17")
+        model_family="gemini_api"
+        model_args="model_version=gemini-2.5-flash-preview-04-17,modality=video"
+        ;;
     "gpt_4o_2024_08_06_f16")
         model_family="gpt4v"
         model_args="model_version=gpt-4o-2024-08-06,modality=video,max_frames_num=16"

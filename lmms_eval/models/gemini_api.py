@@ -50,7 +50,7 @@ class GeminiAPI(lmms):
         self.response_persistent_folder = response_persistent_folder
         if self.continual_mode:
             if not os.path.exists(self.response_persistent_folder):
-            os.makedirs(self.response_persistent_folder)
+                os.makedirs(self.response_persistent_folder)
             self.response_persistent_file = os.path.join(self.response_persistent_folder, f"{self.model_version}_response.json")
             if os.path.exists(self.response_persistent_file):
                 with open(self.response_persistent_file, "r") as f:
@@ -158,6 +158,7 @@ class GeminiAPI(lmms):
                 try:
                     content = chat_session.send_message(contexts)
                     content = content.text
+                    
                     break
                 except Exception as e:
                     eval_logger.info(f"Attempt {attempt + 1} failed with error: {str(e)}")
