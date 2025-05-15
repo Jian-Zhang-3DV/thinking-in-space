@@ -71,8 +71,8 @@ def vsibench_doc_to_text(doc, lmms_eval_specific_kwargs=None):
 
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
-    # 筛选 camera_movement_direction类型的问题
-    dataset = dataset.filter(lambda x: x['question_type'] in ['camera_movement_direction'])
+    # # 筛选 camera_movement_direction类型的问题
+    # dataset = dataset.filter(lambda x: x['question_type'] in ['camera_movement_direction'])
     
     if os.getenv('LMMS_EVAL_SHUFFLE_DOCS', None):
         eval_logger.info(f"Environment variable LMMS_EVAL_SHUFFLE_DOCS detected, dataset will be shuffled.")
