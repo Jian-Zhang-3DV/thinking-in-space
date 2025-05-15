@@ -11,7 +11,9 @@ MODELS_and_MODEL_BASES = [
     # ("llava_video_7b_qwen2_lora_last_hidden_state_and_cam_token", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
     # ("LLaVA-Video-7B-Qwen2", ""),
     # ("llava_video_7b_qwen2_05_11_lora_base_cam_obj_abs_dist_standalone/checkpoint-1200", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"),
-    ("llava_video_7b_qwen2_05_13_lora_cut3r_all_tokens_cross_attn_cam_obj_abs_dist_rel_dir/checkpoint-1671", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"), 
+    # ("llava_video_7b_qwen2_05_13_lora_cut3r_all_tokens_cross_attn_cam_obj_abs_dist_rel_dir/checkpoint-1671", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"), 
+    ("llava_video_7b_qwen2_05_14_lora_cut3r_all_tokens_cross_attn_vstibench/checkpoint-2071", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"), 
+    ("llava_video_7b_qwen2_05_14_lora_base_vstibench/checkpoint-2071", "lmms-lab/LLaVA-NeXT-Video-7B-Qwen2"), 
 ]
 BENCHMARKS = [
     "vstibench",
